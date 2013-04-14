@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+
+
+
+<article lang="en">
+  <articleinfo>
+    
+    
+    <date>2013-04-14</date>
+    
+    
+
+  </articleinfo>
+<simpara>With EL6, configuring OpenStack Grizzly to use Gluster for its Cinder
+(block) storage is fairly simple.</simpara>
+<simpara>These instructions have been tested with both GlusterFS 3.3 and
+GlusterFS 3.4. Other releases may also work, but have not been tested.</simpara>
+<simpara>Before beginning, it is very important to ensure there are <emphasis role="strong">no existing
+volumes</emphasis> in Cinder. Use "cinder delete" to remove any, and "cinder list"
+to verify they are gone. If you don&#8217;t, it will cause errors later in the
+process, breaking your Cinder installation.</simpara>
+<simpara><emphasis role="strong">NOTE</emphasis> - Unlike other software, the "openstack-config" and "cinder"
+commands generally require you to run them as root. Without prior
+configuration, running them through sudo generally doesn&#8217;t work. (this
+can be changed, but is beyond the scope of this HOW-TO)</simpara>
+
+<literallayout class="monospaced">+</literallayout>
+
+<section id="_1_install_glusterfs_client">
+  <title>1. Install GlusterFS client</title>
+  <simpara>On each Cinder host, install the GlusterFS client packages:</simpara>
+
+
+<screen>   $ sudo yum -y install glusterfs-fuse</screen>
+
+
+
+<literallayout class="monospaced">+</literallayout>
+
+
+</section>
+<section id="_2_add_glusterfs_to_cinder_configuration">
+  <title>2. Add GlusterFS to Cinder configuration</title>
+  <simpara>On each Cinder host, run these commands to add GlusterFS to the Cinder
+configuration:</simpara>
+
+
+<screen>   # openstack-config --set cinder.conf DEFAULT volume_driver cinder.volume.drivers.glusterfs.GlusterfsDriver
+   # openstack-config --set cinder.conf DEFAULT glusterfs_shares_config /etc/cinder/shares.conf
+   # openstack-config --set cinder.conf DEFAULT glusterfs_mount_point_base /var/lib/cinder/volumes</screen>
+
+
+
+<literallayout class="monospaced">+</literallayout>
+
+
+</section>
+<section id="_3_create_glusterfs_volume_list">
+  <title>3. Create GlusterFS volume list</title>
+  <simpara>On each of the Cinder nodes, create the simple text file
+<emphasis role="strong">/etc/cinder/shares.conf</emphasis>.</simpara>
+<simpara>This file is a simple list of the GlusterFS volumes to be used, one per
+line, in the format:</simpara>
+
+
+<screen>   GLUSTERHOST:VOLUME
+   GLUSTERHOST:NEXTVOLUME
+   GLUSTERHOST2:SOMEOTHERVOLUME</screen>
+
+
+<simpara>For example:</simpara>
+
+
+<screen>   myglusterbox.example.org:myglustervol</screen>
+
+
+
+<literallayout class="monospaced">+</literallayout>
+
+
+</section>
+<section id="_4_update_the_glusterfs_py_driver_file_if_needed">
+  <title>4. Update the glusterfs.py driver file (if needed)</title>
+  <simpara>If the python-cinder package installed on your system is 2013.1-0.5.rc3
+or earlier, its glusterfs.py file is incompatible with Grizzly.</simpara>
+<simpara>A Grizzly compatible version is being worked on, but might take a week
+or two to be ready.</simpara>
+<simpara>In the meantime, download the temporary replacement file from
+<ulink url="https://github.com/justinclift/miscellaneous/raw/master/glusterfs/glusterfs.py">here</ulink>,
+and use it to overwrite this file:</simpara>
+
+
+<screen>   /usr/lib/python2.6/site-packages/cinder/volume/drivers/glusterfs.py</screen>
+
+
+<simpara>Ensure the ownership and permissions of the file are acceptable in your
+environment:</simpara>
+
+
+<screen>   $ sudo chown root:root /usr/lib/python2.6/site-packages/cinder/volume/drivers/glusterfs.py
+   $ sudo chmod 644 /usr/lib/python2.6/site-packages/cinder/volume/drivers/glusterfs.py</screen>
+
+
+
+<literallayout class="monospaced">+</literallayout>
+
+
+</section>
+<section id="_5_update_firewall_for_glusterfs">
+  <title>5. Update firewall for GlusterFS</title>
+  <simpara>You&#8217;ll also need to update the firewall rules on each Cinder node, so
+they can communicate with the Gluster nodes.</simpara>
+<simpara>The ports to open are explained here (under item 3):</simpara>
+
+
+<screen>   http://gluster.org/community/documentation/index.php/Gluster_3.2:_Installing_GlusterFS_on_Red_Hat_Package_Manager_(RPM)_Distributions</screen>
+
+
+<simpara>If you&#8217;re using iptables as your firewall, these lines can be added
+under <emphasis role="strong">:OUTPUT ACCEPT</emphasis> in the "*filter" section. You should probably
+adjust them to suit your environment (eg. only accept connections from
+your GlusterFS servers).</simpara>
+
+
+<screen>   -A INPUT -m state --state NEW -m tcp -p tcp --dport 111 -j ACCEPT
+   -A INPUT -m state --state NEW -m tcp -p tcp --dport 24007 -j ACCEPT
+   -A INPUT -m state --state NEW -m tcp -p tcp --dport 24008 -j ACCEPT
+   -A INPUT -m state --state NEW -m tcp -p tcp --dport 24009 -j ACCEPT
+   -A INPUT -m state --state NEW -m tcp -p tcp --dport 24010 -j ACCEPT
+   -A INPUT -m state --state NEW -m tcp -p tcp --dport 24011 -j ACCEPT
+   -A INPUT -m state --state NEW -m tcp -p tcp --dport 38465:38469 -j ACCEPT</screen>
+
+
+<simpara>Restart the firewall service:</simpara>
+
+
+<screen>   $ sudo service iptables restart</screen>
+
+
+
+<literallayout class="monospaced">+</literallayout>
+
+
+</section>
+<section id="_6_restart_cinder_volume_service">
+  <title>6. Restart Cinder volume service</title>
+  <simpara>Configuration is complete, so restart the Cinder volume service to make
+it active.</simpara>
+
+
+<screen>   $ sudo service openstack-cinder-volume restart</screen>
+
+
+<simpara>It&#8217;s a good idea to check Cinder volume log after doing so, to make sure
+there are no errors:</simpara>
+
+
+<screen>   $ sudo tail -50 /var/log/cinder/volume.log</screen>
+
+
+
+<literallayout class="monospaced">+</literallayout>
+
+
+</section>
+<section id="_7_verify_glusterfs_is_being_used">
+  <title>7. Verify GlusterFS is being used</title>
+  <simpara>To make sure everything is working as desired, create a Cinder volume
+then check its using GlusterFS.</simpara>
+<simpara>Create a Cinder volume:</simpara>
+
+
+<screen>   # cinder create --display_name myvol 10</screen>
+
+
+<simpara>Wait a few seconds for the creation, then do:</simpara>
+
+
+<screen>   # cinder list</screen>
+
+
+<simpara>The volume should be in "available" status. Now look for a new file in
+the GlusterFS volume directory:</simpara>
+
+
+<screen>   $ sudo ls -lah /var/lib/cinder/volumes/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/</screen>
+
+
+<simpara>(the XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX will be a number specific to your
+installation)</simpara>
+<simpara>A newly created file should be inside that directory. That&#8217;s the new
+volume you just created. A new file will appear each time you create a
+volume.</simpara>
+<simpara>For example:</simpara>
+
+
+<screen>   $ sudo ls -lah /var/lib/cinder/volumes/29e55f0f3d56494ef1b1073ab927d425/
+   total 4.0K
+   drwxr-xr-x. 3 root   root     73 Apr  4 15:46 .
+   drwxr-xr-x. 3 cinder cinder 4.0K Apr  3 09:31 ..
+   -rw-rw-rw-. 1 root   root    10G Apr  4 15:46 volume-a4b97d2e-0f8e-45b2-9b94-b8fa36bd51b9</screen>
+
+
+<simpara>With that, it&#8217;s all done. :)</simpara>
+
+</section>
+
+</article>
