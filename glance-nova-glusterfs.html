@@ -1,0 +1,1042 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>OpenStack Glance And Nova Backed By Red Hat Storage | Tropical Devel</title>
+<link rel="pingback" href="http://tropicaldevel.wordpress.com/xmlrpc.php" />
+<link rel="alternate" type="application/rss+xml" title="Tropical Devel &raquo; Feed" href="https://tropicaldevel.wordpress.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Tropical Devel &raquo; Comments Feed" href="https://tropicaldevel.wordpress.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Tropical Devel &raquo; OpenStack Glance And Nova Backed By Red Hat&nbsp;Storage Comments Feed" href="https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/feed/" />
+<script type="text/javascript">
+/* <![CDATA[ */
+function addLoadEvent(func){var oldonload=window.onload;if(typeof window.onload!='function'){window.onload=func;}else{window.onload=function(){oldonload();func();}}}
+/* ]]> */
+</script>
+<link rel='stylesheet' id='all-css-0' href='https://s1.wp.com/_static/??-eJx9jdEOgjAMRX/I2SjB4IPxW2CUWejWxXYh/L3EF0gwPt7knHtgzs5LMkwGsbjMJVBSYJpQYUTLrZ/cd5296gl2eMcSNkFCwF6KuUGYZYaZ+oB2kHYNSgMlsgXshXGt5dKBeGyTi6R/zSy6drilN6gtjAf25+PGPuPjUt3qurpfm2b8APFfYIc=' type='text/css' media='all' />
+<!--[if IE 6]>
+<link rel='stylesheet' id='oceanmist-ie-css'  href='https://s0.wp.com/wp-content/themes/pub/ocean-mist/ie6.css?m=1246413671g&#038;ver=3.6-beta1-23983' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='print-css-2' href='https://s0.wp.com/wp-content/mu-plugins/global-print/global-print.css?m=1335386953g' type='text/css' media='print' />
+<link rel='stylesheet' id='all-css-2' href='https://s0.wp.com/_static/??/wp-content/mu-plugins/post-flair/sharing/sharing.css,/wp-content/themes/h4/global.css?m=1365539288j' type='text/css' media='all' />
+<script type='text/javascript'>
+/* <![CDATA[ */
+var LoggedOutFollow = {"invalid_email":"Your subscription did not succeed, please try again with a valid email address."};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://s1.wp.com/_static/??-eJyFj+EKwjAMhF/Irorb/CU+y+xiSW2buqQr8+mtoD/EoRDIwX25I7okhdH4PAJrV+eWYVpeq3G80b8AFdBOg8AbNBQFojy5RCwBmAe75n7WYJwRyl/MgaTBXNUEjPev1LMnq5LPFiPrqi2MlEVdyHsquuBoQdYeMhRCva+pyS9NwFihUzju9n3Xt9uuPbgHb95tEg=='></script>
+<link rel='stylesheet' id='all-css-0' href='https://s0.wp.com/wp-content/mu-plugins/highlander-comments/style.css?m=1364417154g' type='text/css' media='all' />
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='highlander-comments-ie7-css'  href='https://s2.wp.com/wp-content/mu-plugins/highlander-comments/style-ie7.css?m=1351637563g&#038;ver=20110606' type='text/css' media='all' />
+<![endif]-->
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://tropicaldevel.wordpress.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://tropicaldevel.wordpress.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='An Image Transfers Service For&nbsp;OpenStack' href='https://tropicaldevel.wordpress.com/2013/01/11/an-image-transfers-service-for-openstack/' />
+<link rel='next' title='Debugging OpenStack with pycharm and&nbsp;pydevd' href='https://tropicaldevel.wordpress.com/2013/01/24/debugging-openstack-with-pycharm-and-pydevd/' />
+<meta name="generator" content="WordPress.com" />
+<link rel='canonical' href='https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/' />
+<link rel='shortlink' href='http://wp.me/p2KVjT-2Q' />
+<link rel="alternate" type="application/json+oembed" href="http://public-api.wordpress.com/oembed/1.0/?format=json&amp;url=https%3A%2F%2Ftropicaldevel.wordpress.com%2F2013%2F01%2F16%2Fopenstack-glance-and-nova-backed-by-red-hat-storage%2F&amp;for=wpcom-auto-discovery" /><link rel="alternate" type="application/xml+oembed" href="http://public-api.wordpress.com/oembed/1.0/?format=xml&amp;url=https%3A%2F%2Ftropicaldevel.wordpress.com%2F2013%2F01%2F16%2Fopenstack-glance-and-nova-backed-by-red-hat-storage%2F&amp;for=wpcom-auto-discovery" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="OpenStack Glance And Nova Backed By Red Hat Storage" />
+<meta property="og:url" content="https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/" />
+<meta property="og:description" content="In this post I will explain how to configure Glance and Nova to be backed by Red Hat Storage (and thereby gluster). The ISOs that I link to in this post require a Red Hat Network subscription.  The..." />
+<meta property="og:site_name" content="Tropical Devel" />
+<meta name="twitter:site" content="@wordpressdotcom" />
+<meta name="twitter:card" content="summary" />
+<meta property="fb:app_id" content="249643311490" />
+<link rel="shortcut icon" type="image/x-icon" href="https://s2.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48" />
+<link rel="icon" type="image/x-icon" href="https://s2.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48" />
+<link rel="apple-touch-icon-precomposed" href="https://s0.wp.com/i/webclip.png" />
+<link rel='openid.server' href='http://tropicaldevel.wordpress.com/?openidserver=1' />
+<link rel='openid.delegate' href='http://tropicaldevel.wordpress.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://tropicaldevel.wordpress.com/osd.xml" title="Tropical Devel" />
+<link rel="search" type="application/opensearchdescription+xml" href="http://wordpress.com/opensearch.xml" title="WordPress.com" />
+		<style>
+		/* <![CDATA[ */
+		/* Block: reblog */
+		
+		.reblog-from img                   { margin: 0 10px 0 0; vertical-align: middle; padding: 0; border: 0; }
+		.reblogger-note img.avatar         { float: left; padding: 0; border: 0; }
+		.reblogger-note-content            { margin: 0 0 20px; }
+		.reblog-post .wpcom-enhanced-excerpt-content { border-left: 3px solid #eee; padding-left: 15px; }
+		.reblog-post ul.thumb-list         { display: block; list-style: none; margin: 2px 0; padding: 0; clear: both; }
+		.reblog-post ul.thumb-list li      { display: inline; margin: 0; padding: 0 1px; border: 0; }
+		.reblog-post ul.thumb-list li a    { margin: 0; padding: 0; border: 0; }
+		.reblog-post ul.thumb-list li img  { margin: 0; padding: 0; border: 0; }
+		
+		.reblog-post .wpcom-enhanced-excerpt { clear: both; }
+		
+		.reblog-post .wpcom-enhanced-excerpt address,
+		.reblog-post .wpcom-enhanced-excerpt li,
+		.reblog-post .wpcom-enhanced-excerpt h1,
+		.reblog-post .wpcom-enhanced-excerpt h2,
+		.reblog-post .wpcom-enhanced-excerpt h3,
+		.reblog-post .wpcom-enhanced-excerpt h4,
+		.reblog-post .wpcom-enhanced-excerpt h5,
+		.reblog-post .wpcom-enhanced-excerpt h6,
+		.reblog-post .wpcom-enhanced-excerpt p { font-size: 100% !important; }
+		
+		.reblog-post .wpcom-enhanced-excerpt blockquote,
+		.reblog-post .wpcom-enhanced-excerpt pre,
+		.reblog-post .wpcom-enhanced-excerpt code,
+		.reblog-post .wpcom-enhanced-excerpt q { font-size: 98% !important; }
+		
+
+		/* ]]> */
+		</style>
+		<meta name="application-name" content="Tropical Devel" /><meta name="msapplication-window" content="width=device-width;height=device-height" /><meta name="msapplication-tooltip" content="Bits of code from the pacific" /><meta name="msapplication-task" content="name=Subscribe;action-uri=https://tropicaldevel.wordpress.com/feed/;icon-uri=https://s2.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=https://s2.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=https://s2.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=https://s2.wp.com/i/favicon.ico" /><meta name="title" content="OpenStack Glance And Nova Backed By Red Hat&nbsp;Storage | Tropical Devel on WordPress.com" />
+<meta name="description" content="Bits of code from the pacific (by John Bresnahan, Red Hat)" />
+<style type="text/css">
+#mainpic {
+	background: url(https://tropicaldevel.files.wordpress.com/2013/01/cropped-tropical_devel_banner.jpg) no-repeat;
+}
+</style>
+
+<script type='text/javascript' src='http://partner.googleadservices.com/gampad/google_service.js'>
+</script>
+<script type='text/javascript'>
+if ( typeof GS_googleAddAdSenseService == 'function' ) { GS_googleAddAdSenseService("ca-pub-3443918307802676"); }
+if ( typeof GS_googleEnableAllServices == 'function' ) { GS_googleEnableAllServices() };
+</script>
+<script type='text/javascript'>
+if ( typeof GA_googleAddSlot == 'function' ) { GA_googleAddSlot("ca-pub-3443918307802676", "wpcom_below_post"); }
+</script>
+<script type='text/javascript'>
+if ( typeof GA_googleFetchAds == 'function' ) { GA_googleFetchAds(); }
+</script>
+
+<script type="text/javascript">
+var wpcom_ads = { bid: 40736101, pt: 'permalink', wa: 0, as: 0, domain: 'tropicaldevel.wordpress.com', url: 'https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/', gid: '', };
+</script>
+<style id="syntaxhighlighteranchor"></style>
+<script type="text/javascript"> 
+	window.google_analytics_uacct = "UA-52447-2"; 
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-52447-2']);
+	_gaq.push(['_setDomainName', 'wordpress.com']);
+	_gaq.push(['_initData']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+	})();
+</script>
+</head>
+<body class="single single-post postid-176 single-format-standard highlander-enabled highlander-light">
+
+<div id="page">
+	<div id="header">
+		<h1><a href="https://tropicaldevel.wordpress.com/">Tropical Devel</a></h1>
+		<div class="description">Bits of code from the pacific&nbsp;</div>
+		<div id="mainpic">
+			<a href="https://tropicaldevel.wordpress.com/">
+						</a>
+		</div>
+		<ul class="pagetabs" id="pagetabs">
+	<li class="page_item page-item-171"><a href="https://tropicaldevel.wordpress.com/about-2/">About</a></li>
+</ul>
+
+	</div>
+
+	<div id="content">
+
+  		<div class="postwrapper wideposts" id="post-176">
+			<div class="title">
+				<small>Posted by: <strong>John Bresnahan, Red Hat</strong> | January 16, 2013 </small>
+				<h2>OpenStack Glance And Nova Backed By Red Hat&nbsp;Storage</h2>
+			</div>
+			<div class="post-176 post type-post status-publish format-standard hentry category-openstack">
+				<div class="entry">
+			      		<p>In this post I will explain how to configure Glance and Nova to be backed by Red Hat Storage (and thereby gluster).</p>
+<p>The ISOs that I link to in this post require a Red Hat Network subscription.  The information here can be useful without it, but it is less convenient.</p>
+<h2>Deployment Details</h2>
+<p>In my deployment I use two virtual machines.  One for Red Hat Storage and the other for all of the OpenStack services (Keystone, Glance, and Nova).  Both VMs run on my Lenovo T530 laptop which runs Fedora 17.  I will not go into detail about how to create VMs because that is covered pretty well in other places, but I will touch on it just to make it as clear as possible.</p>
+<h2>Red Hat Storage VM</h2>
+<p>For the base VM I wanted a lot of space so I created a VM with 48GB of storage (10 should be plenty) and configured it to have 1GB of RAM and 1 CPU.</p>
+<ol>
+<li>Get Red Hat Storage by going <a href="https://rhn.redhat.com/rhn/software/channel/downloads/Download.do?cid=14689">here</a> and clicking on <em>Binary DVD</em>.</li>
+<li>Create a VM with at least 8 GB of storage (mine had 48) and install Red Hat Storage by following the instructions <a href="https://access.redhat.com/knowledge/docs/en-US/Red_Hat_Storage/2.0/html/Installation_Guide/chap-Installation_Guide-Install_RHS.html#sect-Installation_Guide-Install_RHS-install_frm_iso_1">here</a> through step 7.1.</li>
+<li>Create a gluster volume with the following commands:</li>
+</ol>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+gluster volume create testvol myhost:/exp1
+gluster volume start testvol
+/etc/init.d/glusterd restart
+</pre>
+<p>The VM should now be ready to serve a gluster file system.</p>
+<h2>OpenStack VM</h2>
+<p>Here we will use a single VM for all of the OpenStack services.  The explanation of how to back either Glance or Nova by gluster will be the same for a distributed environment.</p>
+<p>Create a VM with 8GB of storage using RHEL 6.4 (64 bit) by downloading the binary DVD available <a href="https://rhn.redhat.com/rhn/software/channel/downloads/Download.do?cid=10156">here</a></p>
+<p>Install OpenStack by following the instructions <a href="https://access.redhat.com/knowledge/docs/en-US/Red_Hat_OpenStack_Preview/2/html/Getting_Started_Guide/chapter-Nova.html">here</a> through step 6.</p>
+<p>At this point you should have a VM which is running enough OpenStack services to upload VMs, launch them, and ssh into them.  The instructions referenced above should provide you with steps to verify this.</p>
+<div id="magicdomid86">note: in selinux I had to run the following command in order to properly boot images:</div>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+setenforce permissive
+</pre>
+<p>You may also need to open up /etc/nova/nova.conf and make sure you have the line:</p>
+<div id="magicdomid101">
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+libvirt_type = qemu
+</pre>
+<h2>Mount Gluster</h2>
+<p>The OpenStack VM now needs to mount the storage system provided by Red Hat Storage so that it can be used by Glance and Nova.  First the VM must be configured so that the recommend gluster client can be used.  The instructions for this are <a href="https://access.redhat.com/knowledge/articles/145553">here</a>, but I will put them in my own words.</p>
+<p>Goto <a href="https://access.redhat.com/subscriptions/rhntransition/">https://access.redhat.com/subscriptions/rhntransition</a> and navigate: Subscriptions -&gt; RHN Classic -&gt; Registered Systems.</p>
+<p>Find your system and click on it.  Click on &#8216;Alter Channel Subscriptions&#8221; on the new page.  Find <a><em>Additional Services Channels for Red Hat Enterprise Linux 6 for x86_64</em>  </a>and expand it.  Select<em> Red Hat Storage Native Client (RHEL Server 6 for x86_64) </em>then click the <em>Update Subscription</em> button.</p>
+<p>Now on the OpenStack machine run:</p>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+yum install glusterfs-fuse glusterfs
+mkdir -p /mnt/gluster/
+mount -t glusterfs &lt;storage VM IP&gt;:/testvol /mnt/gluster
+</pre>
+<p>At this point the OpenStack VM should be able to access the gluster file system.</p>
+<h2>Configure Glance</h2>
+<p>In order to change the path that Glance uses for its file system store only a single line in /etc/glance/glance-api.conf needs to be changed.</p>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+filesystem_store_datadir = /mnt/gluster/glance/images
+</pre>
+<p>Now run the following commands</p>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+mkdir -p /mnt/gluster/glance/images
+chown -R glance:glance /mnt/gluster/glance/
+create the directory for the instance store
+mkdir /mnt/gluster/instance/
+chown -R nova:nova  /mnt/gluster/instance/
+service openstack-glance-api restart
+</pre>
+<p>At this point glance should be backed by the gluster file system.  Lets upload a file to glance and verify this.  A good test image is available <a href="http://berrange.fedorapeople.org/images/2012-02-29/f16-x86_64-openstack-sda.qcow2">here</a>.</p>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+glance image-create --name=&quot;test&quot; --is-public=true --container-format=ovf --disk-format=qcow2 &lt; f16-x86_64-openstack-sda.qcow2
+ls -l /mnt/gluster/glance/images
+</pre>
+<h2>Configure Nova</h2>
+<p>The final step is to configure Nova such that nova-compute uses gluster for its instance store.  The instance store is the temporary area to which the VM is copied and then booted.  Just as it was with Glance, configuring nova to use gluster in this way is a simple one line file change.  Open the file /etc/nova/nova.conf and file the key <em>instances_path</em>.  Change the line to be the following:</p>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+instances_path = /mnt/gluster/instance
+</pre>
+<p>Now setup the correct paths and permissions and restart nova-compute.</p>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+mkdir  -p /mnt/gluster/instance/
+chown -R nova:nova  /mnt/gluster/instance/
+service openstack-nova-compute restart
+</pre>
+<p>That should be all that is needed.</p>
+<h2>Future Work</h2>
+<p>The idea behind this is that if Glance and Nova are backed by the same file system that image propagation should be much faster.  In the future I will be looking for a testbed where I can verify this.</p>
+<h2>Update</h2>
+<p>You should now be able to automatically mount on boot, add the following to you /etc/fstab file:</p>
+<pre class="brush: bash; collapse: false; title: ; wrap-lines: false; notranslate" title="">
+&lt;gluster IP&gt;:/glustervol /mnt/gluster glusterfs defaults,_netdev 0 0
+</pre>
+</div>
+
+<div class="wpadvert" style="position: relative; width:300px; text-align: center; padding: 0; margin: 10px auto; overflow: hidden; clear: both;">
+<a style="position: absolute; text-align: left; display: block; font: 9px/1 sans-serif; text-decoration: underline;" href="http://en.wordpress.com/about-these-ads/" rel="nofollow">About these ads</a>
+<script type="text/javascript">
+		var wpcom_adclk_hovering = false;
+		var wpcom_adclk_recorded = false;
+		var wpcom_adclk_theme = "Ocean Mist";
+		var wpcom_adclk_slot = "wpcom_below_post";
+		var wpcom_adclk_network = ( typeof wpcom_adclk_network === "undefined" ) ? "" : wpcom_adclk_network ;
+
+		jQuery(document).ready( function() {
+			function wpcom_adclk_hover_yes() { wpcom_adclk_hovering = true; }
+			function wpcom_adclk_hover_no() { wpcom_adclk_hovering = false; }
+			jQuery(".wpadvert").click(wpcom_adclk_click);
+			jQuery(".wpadvert iframe").hover( wpcom_adclk_hover_yes, wpcom_adclk_hover_no );
+			jQuery(".wpadvert object").hover( wpcom_adclk_hover_yes, wpcom_adclk_hover_no );
+
+			jQuery(window).blur( function() {
+				if ( wpcom_adclk_hovering ) { wpcom_adclk_click(); }
+			});
+		});
+
+		function wpcom_adclk_impression() {
+			var stat_gif = document.location.protocol + "//stats.wordpress.com/g.gif?v=wpcom-no-pv";
+			stat_gif += "&x_ads_imp_theme=" + wpcom_adclk_theme;
+			stat_gif += "&x_ads_imp_placement="+wpcom_adclk_slot;
+			stat_gif += "&x_ads_imp_network=" + wpcom_adclk_network;
+			stat_gif += "&x_ads_imp_theme_network="+wpcom_adclk_theme+"_"+wpcom_adclk_network;
+			new Image().src = stat_gif + "&baba=" + Math.random();
+			return true;
+		}
+
+		function wpcom_adclk_click() {
+			if (wpcom_adclk_recorded) { return true; } // no double counting
+			var stat_gif = document.location.protocol + "//stats.wordpress.com/g.gif?v=wpcom-no-pv";
+			stat_gif += "&x_ads_click_theme=" + wpcom_adclk_theme;
+			stat_gif += "&x_ads_click_placement="+wpcom_adclk_slot;
+			stat_gif += "&x_ads_click_network=" + wpcom_adclk_network;
+			stat_gif += "&x_ads_click_theme_network="+wpcom_adclk_theme+"_"+wpcom_adclk_network;
+
+			new Image().src = stat_gif + "&baba=" + Math.random();
+			wpcom_adclk_recorded = true;
+			var now=new Date(); var end=now.getTime()+250;
+			while(true){now=new Date();if(now.getTime()>end){break;}}
+			return true;
+		}
+	
+if ( typeof GA_googleAddAttr == 'function' ) {
+GA_googleAddAttr("AdOpt", "1");
+GA_googleAddAttr("Origin", "other");
+GA_googleAddAttr("LangId", "1");
+GA_googleAddAttr("Domain", "tropicaldevel.wordpress.com");
+GA_googleAddAttr("BlogId", "40736101");
+GA_googleAddAttr("Autotag", "technology");
+GA_googleAddAttr("Tag", "openstack");
+GA_googleAddAttr("theme_bg", "ffffff");
+GA_googleAddAttr("theme_text", "4b5d67");
+GA_googleAddAttr("theme_link", "7f1d1d");
+GA_googleAddAttr("theme_border", "e7eef6");
+GA_googleAddAttr("theme_url", "526a74");
+GA_googleAddAdSensePageAttr("google_page_url", "https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/");
+GA_googleFillSlot("wpcom_below_post");
+}
+</script>
+</div>
+<style type="text/css">
+div.wpadvert>div { margin-top: 1em; }
+</style>
+<script type="text/javascript">
+jQuery( window ).load( function() {
+    if ( jQuery(".wpadvert script[src*='shareth.ru']").length > 0 || jQuery(".wpadvert iframe[src*='boomvideo.tv']").length > 0 || jQuery(".wpadvert iframe[src*='viewablemedia.net']").length > 0 || jQuery(".wpadvert .sharethrough-placement").length > 0 ) {
+        jQuery( '.wpadvert' ).css( 'width', '400px' );
+    }
+setTimeout(function(){if(typeof GS_googleAddAdSenseService !== 'function'){new Image().src=document.location.protocol+"//stats.wordpress.com/g.gif?v=wpcom-no-pv&x_noads=adblock&baba="+Math.random()}},100);
+} );
+</script>
+<div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow" class="share-twitter sd-button share-icon" href="https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/?share=twitter" title="Click to share on Twitter" id="sharing-twitter-176"><span>Twitter</span></a></li><li class="share-facebook"><a rel="nofollow" class="share-facebook sd-button share-icon" href="https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/?share=facebook" title="Share on Facebook" id="sharing-facebook-176"><span>Facebook</span></a></li><li class="share-end"></li></ul></div></div></div><div class='sharedaddy sd-block sd-like jetpack-likes-widget-wrapper jetpack-likes-widget-unloaded' id='like-post-wrapper-40736101-176-516b1c4ad965a' data-src='https://widgets.wp.com/likes/#blog_id=40736101&amp;post_id=176&amp;origin=https://tropicaldevel.wordpress.com&amp;obj_id=40736101-176-516b1c4ad965a' data-name='like-post-frame-40736101-176-516b1c4ad965a'><h3 class='sd-title'>Like this:</h3><div class='post-likes-widget-placeholder' style='height:55px'><span class='button'><span>Like</span></span> <span class="loading">Loading...</span></div><span class='sd-text-color'></span><a class='sd-link-color'></a></div></div>							        	</div>
+			    	<div class="postinfo">
+					<p>Posted in <a href="https://tropicaldevel.wordpress.com/category/openstack/" title="View all posts in OpenStack" rel="category tag">OpenStack</a></p>
+			  	</div>
+			</div>
+			<div class="navigation">
+				<div class="alignleft">&laquo; <a href="https://tropicaldevel.wordpress.com/2013/01/11/an-image-transfers-service-for-openstack/" rel="prev">An Image Transfers Service For&nbsp;OpenStack</a></div>
+				<div class="alignright"><a href="https://tropicaldevel.wordpress.com/2013/01/24/debugging-openstack-with-pycharm-and-pydevd/" rel="next">Debugging OpenStack with pycharm and&nbsp;pydevd</a> &raquo;</div>
+			</div>
+			<br style="clear:both" />
+		</div>
+
+	
+<!-- You can start editing here. -->
+
+		<div class="title">
+		<h2 id="comments">Responses</h2>
+		</div>
+		<ol class="commentlist">
+			<li class="comment even thread-even depth-1 archive highlander-comment" id="comment-16">
+		<div class="entry">
+			<img alt='' src='https://i0.wp.com/graph.facebook.com/1030394194/picture?q=type%3Dlarge%26_md5%3Dc12bb5c6654e0723cebdc1c8387c9d1c&resize=48%2C48' class='avatar avatar-48' height='48' width='48' />			<p>What were the specific issues that required SELinux to be disabled? </p>
+<p>For mounting the gluster volume, perhaps show /etc/fstab (since mount -t won&#8217;t be persistent)</p>
+<p>And for using glusterfs to back Nova instances, does this mean that a single base image in /var/lib/nova/instances/_base would be shared among multiple compute nodes?  (Side benefit of this is that only a single retrieval from glance is needed even if the same base image is launched on multiple Compute Nodes, right?)</p>
+<p>Finally&#8230; Does having a gluster backed Nova instance store allow you to do live migration of VMs or is that restricted to only when Nova/Cinder volumes are used for guest boot disks?</p>
+			<ul class="buttons">
+				<li></li>
+			</ul>
+		</div>
+		<div class="postinfo">
+			<p>By: <strong><a href='http://www.facebook.com/pmyers' rel='external nofollow' class='url'>Perry Myers</a></strong> on January 16, 2013 <br /> at 8:47 pm</p>
+			<p><a class='comment-reply-link' href='/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/?replytocom=16#respond' onclick='return addComment.moveForm("comment-16", "16", "respond", "176")'>Reply</a></p>
+			<p></p>
+		</div>
+<ul class="children">
+	<li class="comment byuser comment-author-buzztroll bypostauthor odd alt depth-2 archive highlander-comment" id="comment-18">
+		<div class="entry">
+			<img alt='' src='https://2.gravatar.com/avatar/2de3b88e529ad34e021a0441d3cf63fb?s=48&amp;d=identicon&amp;r=G' class='avatar avatar-48' height='48' width='48' />			<p>In order to run with selinux in enforcing mode (which I agree is the right thing to do) see this bug (in particular comment 6 and 7) <a href="https://bugzilla.redhat.com/show_bug.cgi?id=876452" rel="nofollow">https://bugzilla.redhat.com/show_bug.cgi?id=876452</a></p>
+			<ul class="buttons">
+				<li></li>
+			</ul>
+		</div>
+		<div class="postinfo">
+			<p>By: <strong>buzztroll</strong> on January 17, 2013 <br /> at 8:14 pm</p>
+			<p><a class='comment-reply-link' href='/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/?replytocom=18#respond' onclick='return addComment.moveForm("comment-18", "18", "respond", "176")'>Reply</a></p>
+			<p></p>
+		</div>
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+	<li class="comment byuser comment-author-buzztroll bypostauthor even thread-odd thread-alt depth-1 archive highlander-comment" id="comment-17">
+		<div class="entry">
+			<img alt='' src='https://2.gravatar.com/avatar/2de3b88e529ad34e021a0441d3cf63fb?s=48&amp;d=identicon&amp;r=G' class='avatar avatar-48' height='48' width='48' />			<p>There is a problem that prevents /etc/fstab from working on boot.  gluster comes up after netfs.  The problem is documented here: </p>
+<p><a href="https://access.redhat.com/knowledge/solutions/101223" rel="nofollow">https://access.redhat.com/knowledge/solutions/101223</a></p>
+<p>There is a solution for Red Hat Storage build clients, but not for RHEL 6.4.  Obviously this is something a real system would need because the file system needs to come up before nova-compute does or there will be errors. As a temporary work around you can add this line to /etc/init.d/openstack-keystone at line 95 (i will paste the line before it and after it for context):</p>
+<p>    echo -n $&#8221;Starting $prog: &#8221;<br />
+    mount -t glusterfs 192.168.50.223:/testvol /mnt/gluster/ &amp;&gt; /tmp/error_keystone_gluster.log<br />
+    daemon &#8211;user keystone &#8211;pidfile $pidfile &#8220;$exec &#8211;config-file $config &amp;&gt;/dev/null &amp; echo \$! &gt; $pidfile&#8221;</p>
+<p>Then reboot the system.  When it comes back up run:</p>
+<p>yum install policycoreutils-python<br />
+grep -i mount /var/log/audit/audit.log | audit2allow -M mountallow<br />
+semodule -i mountallow.pp</p>
+<p>That should work.</p>
+			<ul class="buttons">
+				<li></li>
+			</ul>
+		</div>
+		<div class="postinfo">
+			<p>By: <strong>buzztroll</strong> on January 16, 2013 <br /> at 10:51 pm</p>
+			<p><a class='comment-reply-link' href='/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/?replytocom=17#respond' onclick='return addComment.moveForm("comment-17", "17", "respond", "176")'>Reply</a></p>
+			<p></p>
+		</div>
+</li><!-- #comment-## -->
+	<li class="comment odd alt thread-even depth-1 archive highlander-comment" id="comment-24">
+		<div class="entry">
+			<img alt='' src='https://2.gravatar.com/avatar/2de3b88e529ad34e021a0441d3cf63fb?s=48&amp;d=identicon&amp;r=G' class='avatar avatar-48' height='48' width='48' />			<p>For those looking to mount Red Hat Storage from Fedora note this: </p>
+<p><a href="http://www.gluster.org/2012/05/upgrading-to-glusterfs-3-3-0/" rel="nofollow">http://www.gluster.org/2012/05/upgrading-to-glusterfs-3-3-0/</a></p>
+<p>1) GlusterFS 3.3.0 is not compatible with any earlier released versions. Please make sure that you schedule a downtime before you upgrade.</p>
+<p>Fedora 17 is running 3.2.7 and Red Hat Storage is running 3.3.0.  The gluster client on Fedora would have to manually be upgraded, or the NFS client could be used.</p>
+			<ul class="buttons">
+				<li></li>
+			</ul>
+		</div>
+		<div class="postinfo">
+			<p>By: <strong><a href='http://gravatar.com/buzztroll' rel='external nofollow' class='url'>John Bresnahan</a></strong> on January 18, 2013 <br /> at 11:49 pm</p>
+			<p><a class='comment-reply-link' href='/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/?replytocom=24#respond' onclick='return addComment.moveForm("comment-24", "24", "respond", "176")'>Reply</a></p>
+			<p></p>
+		</div>
+</li><!-- #comment-## -->
+	<li class="comment even thread-odd thread-alt depth-1 archive highlander-comment" id="comment-105">
+		<div class="entry">
+			<img alt='' src='https://1.gravatar.com/avatar/d4589085fd79c9d4b3ebdebd1e877a8e?s=48&amp;d=identicon&amp;r=G' class='avatar avatar-48' height='48' width='48' />			<p>John, </p>
+<p>I think you have a typo in the following command: </p>
+<p>gluster volume create testvol:/exp1</p>
+<p># gluster volume create testvol:/exp1<br />
+Usage: volume create  [stripe ] [replica ] [transport ]  &#8230;</p>
+<p>The correct command, in this case, would be:</p>
+<p># gluster volume create testvol myhost:/exp1<br />
+Creation of volume testvol has been successful. Please start the volume to access data.</p>
+<p>I added myhost to /etc/hosts before running the command.</p>
+<p>I&#8217;ll let you know if I find anything else as I go through the instructions. </p>
+<p>Thanks,<br />
+Marcelo</p>
+			<ul class="buttons">
+				<li></li>
+			</ul>
+		</div>
+		<div class="postinfo">
+			<p>By: <strong>Marcelo Giles</strong> on April 2, 2013 <br /> at 1:11 am</p>
+			<p><a class='comment-reply-link' href='/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/?replytocom=105#respond' onclick='return addComment.moveForm("comment-105", "105", "respond", "176")'>Reply</a></p>
+			<p></p>
+		</div>
+</li><!-- #comment-## -->
+		</ol>
+
+		<div class="navigation">
+			<div class="alignleft"></div>
+			<div class="alignright"></div>
+		</div>
+		<br />
+
+
+
+								<div id="respond">
+				<h3 id="reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="https://tropicaldevel.wordpress.com/wp-comments-post.php" method="post" id="commentform">
+																										
+
+
+												
+<input type="hidden" name="hc_post_as" id="hc_post_as" value="guest" />
+
+<div class="comment-form-field comment-textarea">
+	<label for="comment">Enter your comment here...</label>
+	<div id="comment-form-comment"><textarea id="comment" name="comment"></textarea></div>
+</div>
+
+<div id="comment-form-identity">
+
+	<div id="comment-form-nascar">
+		<p>Fill in your details below or click an icon to log in:</p>
+		<ul>
+			<li class="selected" style="display:none;">
+				<a href="#comment-form-guest" id="postas-guest" title="Guest">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:WordPress.com" id="postas-wordpress" title="WordPress.com">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:Twitter" id="postas-twitter" title="Twitter">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:Facebook" id="postas-facebook" title="Facebook">
+					<span></span>
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div id="comment-form-guest" class="comment-form-service selected">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+<a href="https://gravatar.com/site/signup/" target="_blank">				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="Gravatar" width="25" class="no-grav" />
+</a>			</div>
+
+				<div class="comment-form-fields">
+				<div class="comment-form-field comment-form-email">
+					<label for="email">Email <span class="required">(required)</span> <span class="nopublish">(Address never made public)</span></label>
+					<div class="comment-form-input"><input id="email" name="email" type="email" value="" /></div>
+				</div>
+				<div class="comment-form-field comment-form-author">
+					<label for="author">Name <span class="required">(required)</span></label>
+					<div class="comment-form-input"><input id="author" name="author" type="text" value="" /></div>
+				</div>
+				<div class="comment-form-field comment-form-url">
+					<label for="url">Website</label>
+					<div class="comment-form-input"><input id="url" name="url" type="text" value="" /></div>
+				</div> 
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-wordpress" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="https://s2.wp.com/wp-content/mu-plugins/highlander-comments/images/wplogo.png" alt="WordPress.com Logo" width="25" class="no-grav" />
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="wp_avatar" id="wordpress-avatar" class="comment-meta-wordpress" value="" />
+				<input type="hidden" name="wp_user_id" id="wordpress-user_id" class="comment-meta-wordpress" value="" />
+				<input type="hidden" name="wp_access_token" id="wordpress-access_token" class="comment-meta-wordpress" value="" />
+				<p class="comment-form-posting-as pa-wordpress"><strong></strong> You are commenting using your WordPress.com account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( 'wordpress' );">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-twitter" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="Twitter picture" width="25" class="no-grav" />
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="twitter_avatar" id="twitter-avatar" class="comment-meta-twitter" value="" />
+				<input type="hidden" name="twitter_user_id" id="twitter-user_id" class="comment-meta-twitter" value="" />
+				<input type="hidden" name="twitter_access_token" id="twitter-access_token" class="comment-meta-twitter" value="" />
+				<p class="comment-form-posting-as pa-twitter"><strong></strong> You are commenting using your Twitter account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( 'twitter' );">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-facebook" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="https://1.gravatar.com/avatar/ad516503a11cd5ca435acc9bb6523536?s=25&amp;d=identicon&amp;forcedefault=y&amp;r=G" alt="Facebook photo" width="25" class="no-grav" />
+			</div>
+
+				<div class="comment-form-fields">
+				<input type="hidden" name="fb_avatar" id="facebook-avatar" class="comment-meta-facebook" value="" />
+				<input type="hidden" name="fb_user_id" id="facebook-user_id" class="comment-meta-facebook" value="" />
+				<input type="hidden" name="fb_access_token" id="facebook-access_token" class="comment-meta-facebook" value="" />
+				<p class="comment-form-posting-as pa-facebook"><strong></strong> You are commenting using your Facebook account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout( 'facebook' );">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+
+	<div id="comment-form-load-service" class="comment-form-service">
+		<div class="comment-form-posting-as-cancel"><a href="javascript:HighlanderComments.cancelExternalWindow();">Cancel</a></div>
+		<p>Connecting to %s</p>
+	</div>
+	
+	
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	var input = document.createElement( 'input' ),
+	    comment = jQuery( '#comment' );
+
+	if ( 'placeholder' in input ) {
+		comment.attr( 'placeholder', jQuery( '.comment-textarea label' ).remove().text() );
+	}
+
+	// Expando Mode: start small, then auto-resize on first click + text length
+	jQuery( '#comment-form-identity' ).hide();
+	jQuery( '#comment-form-subscribe' ).hide();
+	jQuery( '#commentform .form-submit' ).hide();
+
+	comment.css( { 'height':'10px' } ).one( 'focus', function() {
+		var timer = setInterval( HighlanderComments.resizeCallback, 10 )
+		jQuery( this ).animate( { 'height': HighlanderComments.initialHeight } ).delay( 100 ).queue( function(n) { clearInterval( timer ); HighlanderComments.resizeCallback(); n(); } );
+		jQuery( '#comment-form-identity' ).slideDown();
+		jQuery( '#comment-form-subscribe' ).slideDown();
+		jQuery( '#commentform .form-submit' ).slideDown();
+	});
+});
+</script>
+
+<div id="comment-form-subscribe"> 
+	<p class="comment-subscription-form"><input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;" tabindex="6"/> <label class="subscribe-label" id="subscribe-label" for="subscribe" style="display: inline;">Notify me of follow-up comments via email.</label></p></div>
+
+												<p class="form-submit">
+							<input name="submit" type="submit" id="comment-submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='176' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						
+<input type="hidden" name="genseq" value="1365974090" />
+<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="b6a6723599" /></p><script type='text/javascript' src='https://s2.wp.com/wp-content/mu-plugins/akismet-2.5/form.js?m=1308783962g'></script>
+<p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="64"/></p>					</form>
+							</div><!-- #respond -->
+			<div style="clear: both"></div>			
+
+	
+	<div class="title">
+		<h2>Categories</h2>
+	</div>
+	<div class="post-176 post type-post status-publish format-standard hentry category-openstack">
+	  <ul class="catlist">
+        	<li class="cat-item cat-item-13108840"><a href="https://tropicaldevel.wordpress.com/category/openstack/" title="Posts about OpenStack software development.">OpenStack</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://tropicaldevel.wordpress.com/category/uncategorized/" title="View all posts filed under Uncategorized">Uncategorized</a>
+</li>
+	  </ul>
+	</div>
+
+  </div>
+
+	<div id="sidebar">
+	      <div id="search-2" class="widget widget_search"><form method="get" id="searchform" action="https://tropicaldevel.wordpress.com/">
+	<div>
+		<input type="text" name="s" id="s" placeholder="Search" />
+		<input type="image" src="https://s0.wp.com/wp-content/themes/pub/ocean-mist/images/button-search.gif" id="searchsubmit" value="Search" />
+	</div>
+</form>
+</div>		<div id="recent-posts-2" class="widget widget_recent_entries">		<div class="title"> <h2>Recent Posts</h2> </div>		<ul>
+					<li>
+				<a href="https://tropicaldevel.wordpress.com/2013/04/09/free-cache/" title="Free&nbsp;Cache">Free&nbsp;Cache</a>
+						</li>
+					<li>
+				<a href="https://tropicaldevel.wordpress.com/2013/03/26/the-cost-of/" title="The Cost Of Client Side Image Downloads On the&nbsp;CPU">The Cost Of Client Side Image Downloads On the&nbsp;CPU</a>
+						</li>
+					<li>
+				<a href="https://tropicaldevel.wordpress.com/2013/03/06/a-look-at-performance-when-glance-is-backed-by-gluster/" title="A Look At Performance When Glance Is Backed By&nbsp;Gluster">A Look At Performance When Glance Is Backed By&nbsp;Gluster</a>
+						</li>
+					<li>
+				<a href="https://tropicaldevel.wordpress.com/2013/01/24/debugging-openstack-with-pycharm-and-pydevd/" title="Debugging OpenStack with pycharm and&nbsp;pydevd">Debugging OpenStack with pycharm and&nbsp;pydevd</a>
+						</li>
+					<li>
+				<a href="https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/" title="OpenStack Glance And Nova Backed By Red Hat&nbsp;Storage">OpenStack Glance And Nova Backed By Red Hat&nbsp;Storage</a>
+						</li>
+				</ul>
+		</div><div id="archives-2" class="widget widget_archive"><div class="title"> <h2>Archives</h2> </div>		<ul>
+			<li><a href='https://tropicaldevel.wordpress.com/2013/04/' title='April 2013'>April 2013</a></li>
+	<li><a href='https://tropicaldevel.wordpress.com/2013/03/' title='March 2013'>March 2013</a></li>
+	<li><a href='https://tropicaldevel.wordpress.com/2013/01/' title='January 2013'>January 2013</a></li>
+	<li><a href='https://tropicaldevel.wordpress.com/2012/12/' title='December 2012'>December 2012</a></li>
+	<li><a href='https://tropicaldevel.wordpress.com/2012/09/' title='September 2012'>September 2012</a></li>
+		</ul>
+</div><div id="categories-2" class="widget widget_categories"><div class="title"> <h2>Categories</h2> </div>		<ul>
+	<li class="cat-item cat-item-13108840"><a href="https://tropicaldevel.wordpress.com/category/openstack/" title="Posts about OpenStack software development.">OpenStack</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="https://tropicaldevel.wordpress.com/category/uncategorized/" title="View all posts filed under Uncategorized">Uncategorized</a>
+</li>
+		</ul>
+</div><div id="meta-2" class="widget widget_meta"><div class="title"> <h2>Meta</h2> </div>			<ul>
+			<li><a href="https://tropicaldevel.wordpress.com/wp-login.php?action=register">Register</a></li>			<li><a href="https://tropicaldevel.wordpress.com/wp-login.php">Log in</a></li>
+			<li><a href="https://tropicaldevel.wordpress.com/feed/" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="https://tropicaldevel.wordpress.com/comments/feed/" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<a href="http://wordpress.com/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.com</a>						</ul>
+</div></div>
+
+
+  <div id="footer">
+    <div id="footer-top"></div>
+	<p><a href="http://wordpress.com/?ref=footer" rel="generator">Blog at WordPress.com</a>. | Theme: <a href="http://theme.wordpress.com/themes/ocean-mist/" title="Learn more about this theme">Ocean Mist</a> by <a href="http://www.edmerritt.com/" rel="designer">Ed Merritt</a>.</p>
+  </div>
+</div>
+
+<script type="text/javascript">
+var _qevents = _qevents || [], wpcomQuantcastData = {"qacct":"p-18-mFEk4J448M","labels":",language.en,type.wpcom,as"};
+function wpcomQuantcastPixel( labels, options ) {
+	var i, defaults = wpcomQuantcastData, data = { event: 'ajax' };
+
+	labels  = labels  || '';
+	options = options || {};
+
+	if ( typeof labels != 'string' )
+		options = labels;
+
+	for ( i in defaults ) {
+		data[i] = defaults[i];
+	}
+
+	for ( i in options ) {
+		data[i] = options[i];
+	}
+
+	if ( data.labels ) {
+		data.labels += ',' + labels;
+	} else {
+		data.labels = labels;
+	}
+
+	_qevents.push( data );
+};
+(function() {var elem = document.createElement('script');elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";elem.async = true;elem.type = "text/javascript";var scpt = document.getElementsByTagName('script')[0];scpt.parentNode.insertBefore(elem, scpt);  })();
+_qevents.push( wpcomQuantcastData );
+</script>
+<noscript><div style="display: none;"><img src="//pixel.quantserve.com/pixel/p-18-mFEk4J448M.gif?labels=%2Clanguage.en%2Ctype.wpcom%2Cas" height="1" width="1" alt="" /></div></noscript>
+
+<script type='text/javascript' src='//0.gravatar.com/js/gprofiles.js?ver=201315ac'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1351637563g'></script>
+<script>jQuery(document).ready(function($){ Gravatar.profile_cb = function( h, d ) { WPGroHo.syncProfileData( h, d );	}; Gravatar.my_hash = WPGroHo.my_hash; Gravatar.init( 'body', '#wp-admin-bar-my-account' ); });</script>	<div style="display:none">
+	<div class="grofile-hash-map-7451abdcd48856c49d6469f4a1733d28">
+	</div>
+	<div class="grofile-hash-map-2de3b88e529ad34e021a0441d3cf63fb">
+	</div>
+	<div class="grofile-hash-map-2de3b88e529ad34e021a0441d3cf63fb">
+	</div>
+	<div class="grofile-hash-map-d4589085fd79c9d4b3ebdebd1e877a8e">
+	</div>
+	</div>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var HighlanderComments = {"loggingInText":"Logging In\u2026","submittingText":"Posting Comment\u2026","postCommentText":"Post Comment","connectingToText":"Connecting to %s","commentingAsText":"%1$s: You are commenting using your %2$s account.","logoutText":"Log Out","loginText":"Log In","connectURL":"https:\/\/tropicaldevel.wordpress.com\/public.api\/connect\/?action=request","logoutURL":"https:\/\/tropicaldevel.wordpress.com\/wp-login.php?action=logout&_wpnonce=c467bf0a43","homeURL":"https:\/\/tropicaldevel.wordpress.com\/","postID":"176","gravDefault":"identicon","enterACommentError":"Please enter a comment","enterEmailError":"Please enter your email address here","invalidEmailError":"Invalid email address","enterAuthorError":"Please enter your name here","gravatarFromEmail":"This picture will show whenever you leave a comment. Click to customize it.","logInToExternalAccount":"Log in to use details from one of these accounts.","change":"Change","changeAccount":"Change Account","comment_registration":"0","userIsLoggedIn":"","isJetpack":"0"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://s1.wp.com/wp-content/mu-plugins/highlander-comments/script.js?m=1364417154g'></script>
+
+	<div id="bit" class="loggedout-follow-normal">
+		<a class="bsub" href="javascript:void(0)"><span id='bsub-text'>Follow</span></a>
+		<div id="bitsubscribe">
+
+					<h3><label for="loggedout-follow-field">Follow &ldquo;Tropical Devel&rdquo;</label></h3>
+
+			<form action="https://subscribe.wordpress.com" method="post" accept-charset="utf-8" id="loggedout-follow">
+			<p>Get every new post delivered to your Inbox.</p>
+
+			<p id="loggedout-follow-error" style="display: none;"></p>
+
+			
+			<p><input type="email" name="email" style="width: 95%; padding: 1px 2px" value="Enter your email address" onfocus='this.value=(this.value=="Enter your email address") ? "" : this.value;' onblur='this.value=(this.value=="") ? "Enter email address" : this.value;'  id="loggedout-follow-field"/></p>
+
+			<input type="hidden" name="action" value="subscribe"/>
+			<input type="hidden" name="blog_id" value="40736101"/>
+			<input type="hidden" name="source" value="https://tropicaldevel.wordpress.com/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/"/>
+			<input type="hidden" name="sub-type" value="loggedout-follow"/>
+
+			<input type="hidden" id="_wpnonce" name="_wpnonce" value="40a8c577de" /><input type="hidden" name="_wp_http_referer" value="/2013/01/16/openstack-glance-and-nova-backed-by-red-hat-storage/" />
+			<p id='bsub-subscribe-button'><input type="submit" value="Sign me up" /></p>
+			</form>
+					<div id='bsub-credit'><a href="http://wordpress.com/signup/?ref=lof">Powered by WordPress.com</a></div>
+		</div><!-- #bitsubscribe -->
+	</div><!-- #bit -->
+
+	<script type="text/javascript">
+		WPCOM_sharing_counts = {"https:\/\/tropicaldevel.wordpress.com\/2013\/01\/16\/openstack-glance-and-nova-backed-by-red-hat-storage\/":176}	</script>
+<script type='text/javascript' src='https://s1.wp.com/wp-content/mu-plugins/post-flair/sharing/sharing.js?m=1363286270g'></script>
+		<script type="text/javascript">
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-twitter' ).on( 'click', function() {
+				window.open( jQuery(this).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+		});
+		</script>
+				<script type="text/javascript">
+		jQuery(document).on( 'ready post-load', function(){
+			jQuery( 'a.share-facebook' ).on( 'click', function() {
+				window.open( jQuery(this).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+		});
+		</script>
+				<iframe src='https://widgets.wp.com/likes/master.html?ver=20130404#ver=20130404' id='likes-master' name='likes-master' style='display:none;'></iframe>
+		<div id='likes-other-gravatars'><div class="likes-text"><span>%d</span> bloggers like this:</div><ul class="wpl-avatars sd-like-gravatars"></ul></div>
+		<script type="text/javascript">
+		//<![CDATA[
+			var jetpackLikesWidgetQueue = [];
+			var jetpackLikesMasterReady = false;
+
+			function JetpackLikespostMessage( message, target ) {
+				if ( "string" === typeof message ){
+					try{
+						message = JSON.parse( message );
+					}
+					catch(e) {
+						return;
+					}
+				}
+
+				pm( {
+					target: target,
+					type: 'likesMessage',
+					data: message,
+					origin: '*'					
+				} );
+			}
+
+			function JetpackLikesMessageListener( event ) {
+				if ( "undefined" == typeof event.event )
+					return;
+
+				if ( 'masterReady' == event.event ) {
+					jQuery( document ).ready( function() {
+						jetpackLikesMasterReady = true;
+
+						var stylesData = {
+								event: 'injectStyles'
+						};
+
+						if ( jQuery( 'iframe.admin-bar-likes-widget' ).length > 0 ) {
+							JetpackLikespostMessage( { event: 'adminBarEnabled' }, window.frames[ 'likes-master' ] );
+
+							stylesData.adminBarStyles = {
+								background: jQuery( '#wpadminbar .quicklinks li#wp-admin-bar-wpl-like > a' ).css( 'background' )
+							};
+						}
+
+						if ( !window.addEventListener )
+							jQuery( '#wp-admin-bar-admin-bar-likes-widget' ).hide();
+
+						stylesData.textStyles = {
+							color: jQuery( '.sd-text-color').css( 'color' ),
+							fontFamily: jQuery( '.sd-text-color' ).css( 'font-family' ),
+							fontSize: jQuery( '.sd-text-color' ).css( 'font-size' ),
+							direction: jQuery( '.sd-text-color' ).css( 'direction' ),
+							fontWeight: jQuery( '.sd-text-color' ).css( 'font-weight' ),
+							fontStyle: jQuery( '.sd-text-color' ).css( 'font-style' ),
+							textDecoration: jQuery( '.sd-text-color' ).css('text-decoration')
+						};
+
+						stylesData.linkStyles = {
+							color: jQuery( '.sd-link-color' ).css('color'),
+							fontFamily: jQuery( '.sd-link-color' ).css('font-family'),
+							fontSize: jQuery( '.sd-link-color' ).css('font-size'),
+							textDecoration: jQuery( '.sd-link-color' ).css('text-decoration'),
+							fontWeight: jQuery( '.sd-link-color' ).css( 'font-weight' ),
+							fontStyle: jQuery( '.sd-link-color' ).css( 'font-style' )
+						};
+
+						JetpackLikespostMessage( stylesData, window.frames[ 'likes-master' ] );
+
+						var requests = [];
+						jQuery( '.jetpack-likes-widget-wrapper' ).each( function( i ) {
+							var regex = /like-(post|comment)-wrapper-(\d+)-(\d+)-(\w+)/;
+							var match = regex.exec( this.id );
+							if ( ! match || match.length != 5 )
+								return;
+
+							var info = {
+								blog_id: match[2],
+								width:   this.width
+							};
+
+							if ( 'post' == match[1] ) {
+								info.post_id = match[3];
+							} else if ( 'comment' == match[1] ) {
+								info.comment_id = match[3];
+							}
+
+							info.obj_id = match[4];
+
+							requests.push( info );
+						});
+
+						JetpackLikespostMessage( { event: 'initialBatch', requests: requests }, window.frames['likes-master'] );
+
+						jQuery( document ).on( 'inview', 'div.jetpack-likes-widget-unloaded', function() {
+							jetpackLikesWidgetQueue.push( this.id );
+						});
+					});
+				}
+
+				if ( 'showLikeWidget' == event.event ) {
+					setTimeout( JetpackLikesWidgetQueueHandler, 10 );
+					jQuery( '#' + event.id + ' .post-likes-widget-placeholder'  ).fadeOut( 'fast', function() {
+						jQuery( '#' + event.id + ' .post-likes-widget' ).fadeIn( 'fast', function() {
+							JetpackLikespostMessage( { event: 'likeWidgetDisplayed', blog_id: event.blog_id, post_id: event.post_id, obj_id: event.obj_id }, window.frames['likes-master'] );
+						});
+					});
+				}
+
+				if ( 'showOtherGravatars' == event.event ) {
+					var $container = jQuery( '#likes-other-gravatars' );
+					var $list = $container.find( 'ul' );
+
+					$container.hide();
+					$list.html( '' );
+
+					$container.find( '.likes-text span' ).text( event.total );
+
+					jQuery.each( event.likers, function( i, liker ) {
+						$list.append( '<li class="' + liker.css_class + '"><a href="' + liker.profile_URL + '" class="wpl-liker" rel="nofollow" target="_parent"><img src="' + liker.avatar_URL + '" alt="' + liker.name + '" width="30" height="30" style="padding-right: 3px;" /></a></li>');
+					} );
+
+					var offset = jQuery( "[name='" + event.parent + "']" ).offset();
+
+					$container.css( 'left', offset.left + event.position.left - 10 + 'px' );
+					$container.css( 'top', offset.top + event.position.top - 33 + 'px' );
+
+					var rowLength = Math.floor( event.width / 37 );
+					var height = ( Math.ceil( event.likers.length / rowLength ) * 37 ) + 13;
+					if ( height > 204 ) {
+						height = 204;
+					}
+
+					$container.css( 'height', height + 'px' );
+					$container.css( 'width', rowLength * 37 - 7 + 'px' );
+
+					$list.css( 'width', rowLength * 37 + 'px' );
+
+					$container.fadeIn( 'slow' );
+
+					var scrollbarWidth = $list[0].offsetWidth - $list[0].clientWidth;
+					if ( scrollbarWidth > 0 ) {
+						$container.width( $container.width() + scrollbarWidth );
+						$list.width( $list.width() + scrollbarWidth );
+					}
+				}
+			}
+
+			pm.bind( 'likesMessage', function(e) { JetpackLikesMessageListener(e); } );
+
+			jQuery( document ).click( function( e ) {
+				var $container = jQuery( '#likes-other-gravatars' );
+
+				if ( $container.has( e.target ).length === 0 ) {
+					$container.fadeOut( 'slow' );
+				}
+			});
+
+			function JetpackLikesWidgetQueueHandler() {
+				var wrapperID;
+				if ( ! jetpackLikesMasterReady ) {
+					setTimeout( JetpackLikesWidgetQueueHandler, 500 );
+					return;
+				}
+
+				if ( jetpackLikesWidgetQueue.length > 0 ) {
+					// We may have a widget that needs creating now
+					var found = false;
+					while( jetpackLikesWidgetQueue.length > 0 ) {
+						// Grab the first member of the queue that isn't already loading.
+						wrapperID = jetpackLikesWidgetQueue.splice( 0, 1 )[0];
+						if ( jQuery( '#' + wrapperID ).hasClass( 'jetpack-likes-widget-unloaded' ) ) {
+							found = true;
+							break;
+						}
+					}
+					if ( ! found ) {
+						setTimeout( JetpackLikesWidgetQueueHandler, 500 );
+						return;
+					}
+				} else if ( jQuery( 'div.jetpack-likes-widget-unloaded' ).length > 0 ) {
+					// Get the next unloaded widget
+					wrapperID = jQuery( 'div.jetpack-likes-widget-unloaded' ).first()[0].id;
+					if ( ! wrapperID ) {
+						// Everything is currently loaded
+						setTimeout( JetpackLikesWidgetQueueHandler, 500 );
+						return;
+					}
+				}
+
+				var $wrapper = jQuery( '#' + wrapperID );
+				$wrapper.find( 'iframe' ).remove();
+
+				if ( $wrapper.hasClass( 'slim-likes-widget' ) ) {
+					$wrapper.find( '.post-likes-widget-placeholder' ).after( "<iframe class='post-likes-widget jetpack-likes-widget' name='" + $wrapper.data( 'name' ) + "' height='22px' width='68px' frameBorder='0' scrolling='no' src='" + $wrapper.data( 'src' ) + "'></iframe>" );
+				} else {
+					$wrapper.find( '.post-likes-widget-placeholder' ).after( "<iframe class='post-likes-widget jetpack-likes-widget' name='" + $wrapper.data( 'name' ) + "' height='55px' width='100%' frameBorder='0' src='" + $wrapper.data( 'src' ) + "'></iframe>" );
+				}
+
+				$wrapper.removeClass( 'jetpack-likes-widget-unloaded' ).addClass( 'jetpack-likes-widget-loading' );
+
+				$wrapper.find( 'iframe' ).load( function( e ) {
+					var $iframe = jQuery( e.target );
+					$wrapper.removeClass( 'jetpack-likes-widget-loading' ).addClass( 'jetpack-likes-widget-loaded' );
+
+					JetpackLikespostMessage( { event: 'loadLikeWidget', name: $iframe.attr( 'name' ), width: $iframe.width() }, window.frames[ 'likes-master' ] );
+
+					if ( $wrapper.hasClass( 'slim-likes-widget' ) ) {
+						$wrapper.find( 'iframe' ).Jetpack( 'resizeable' );
+					}
+				});
+			}
+			setInterval( JetpackLikesWidgetQueueHandler, 250 );
+		//]]>
+		</script>
+<script type='text/javascript' src='https://s1.wp.com/_static/??-eJzTLy/QTc7PK0nNK9EvyClNz8wr1i+uzCtJrMjITM/IAeKS1CJMEWP94uSizIISoOIM5/yiVL2sYh19yo1yKioFEonFGUDz7HNtDY3NjI0NTEwMTbIA0GU/+A=='></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "https://s0.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.83c";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "https://s0.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?m=1363304414g&amp;ver=3.0.83c";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx.js?m=1354656609g'></script>
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script><script src="https://ssl-stats.wordpress.com/w.js?21" type="text/javascript"></script>
+<script type="text/javascript">
+st_go({'blog':'40736101','v':'wpcom','tz':'0','user_id':'0','post':'176','subd':'tropicaldevel'});
+ex_go({'crypt':'UE5XaGUuOTlwaD85flAmcm1mcmZsaDhkV11YdTdvUG14Q2VDQTR4LlUsLi82dU1mai9BMmlCVVM1U0h6VG1VaEh+RVFNPUNyKzBHa1R3RyVjOEdveUQ3OUhiaHdEU0NsMVVXNFZhU34tP0tVTjZxRVlxcjBoNXRQT1hPcUZKb1JvMmdCdTZwXyZRTXFOYnBlK1d8K2pNQzg3bFZEM1t5RH5EJS5SQ0s4U1NJandOb0NjRS1dUCtjRkk4ZGZvWzglckFsSFpTcnltdyUvSkJJeCtOSUxRJTRVK0ZmVkk5SGR2ZVpxMzRKcmxdQVN5V01wSTFfPT95L2NVWWtCWVZrTVNdZW1HQjFweHFBfFc/dW0xR0k0d3l8d0dSYnpzWGZdZGZzW28vag=='});
+addLoadEvent(function(){linktracker_init('40736101',176);});
+	</script>
+<noscript><img src="https://stats.wordpress.com/b.gif?v=noscript" style="height:0px;width:0px;overflow:hidden" alt="" /></noscript>
+</body>
+</html>

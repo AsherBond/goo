@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Howto: Using UFO (swift) — A Quick Setup Guide | Gluster Community Website</title>
+
+<link rel="stylesheet" href="http://www.gluster.org/wp-content/themes/gluster1/style.css" type="text/css" />
+<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+<link rel="alternate" type="application/rss+xml" title="Gluster Community Website &raquo; Howto: Using UFO (swift) — A Quick Setup Guide Comments Feed" href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/feed/" />
+<link rel='stylesheet' id='admin-bar-css'  href='http://www.gluster.org/wp-includes/css/admin-bar.min.css?ver=3.5.1' type='text/css' media='all' />
+<link rel='stylesheet' id='usernoise-adminbar-css'  href='http://www.gluster.org/wp-content/plugins/usernoise/css/admin-bar.css?ver=3.0.10' type='text/css' media='all' />
+<link rel='stylesheet' id='usernoise-button-css'  href='http://www.gluster.org/wp-content/plugins/usernoise/css/button.css?ver=3.0.10' type='text/css' media='all' />
+<link rel='stylesheet' id='usernoise-form-css'  href='http://www.gluster.org/wp-content/plugins/usernoise/css/form.css?ver=3.0.10' type='text/css' media='all' />
+<link rel='stylesheet' id='ayvpp-admin-css'  href='http://www.gluster.org/wp-content/plugins/automatic-youtube-video-posts/css/style.css?ver=3.5.1' type='text/css' media='all' />
+<script type="text/javascript">var ayvpp_root = "http://www.gluster.org";</script>
+<script type='text/javascript' src='http://www.gluster.org/wp-includes/js/jquery/jquery.js?ver=1.8.3'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var usernoiseButton = {"text":"Feedback","style":"background-color: #404040; color: #FFFFFF","class":"un-right un-has-border","windowUrl":"\/wp-admin\/admin-ajax.php?action=un_load_window","showButton":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://www.gluster.org/wp-content/plugins/usernoise/js/usernoise.js?ver=3.0.10'></script>
+<script type='text/javascript' src='http://www.gluster.org/wp-content/plugins/usernoise/js/button.js?ver=3.0.10'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.gluster.org/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.gluster.org/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Envelope-driven development' href='http://www.gluster.org/2012/09/envelope-driven-development-2/' />
+<link rel='next' title='What is this new .glusterfs directory in 3.3?' href='http://joejulian.name/blog/what-is-this-new-glusterfs-directory-in-33/' />
+<meta name="generator" content="WordPress 3.5.1" />
+<link rel='canonical' href='http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/' />
+<link rel='shortlink' href='http://www.gluster.org/?p=1412' />
+   <link rel="stylesheet" href="http://www.gluster.org/wp-content/plugins/tdo-mini-forms/tdomf-style-form.css" type="text/css" media="screen" />
+   <style type="text/css" media="print">#wpadminbar { display:none; }</style>
+<style type="text/css" media="screen">
+	html { margin-top: 28px !important; }
+	* html body { margin-top: 28px !important; }
+</style>
+</head>
+<body class="single single-post postid-1412 single-format-standard logged-in admin-bar no-customize-support">
+
+<div id="wrapper">
+
+	<header>
+		<a href="http://www.gluster.org"><img class="logo" src="http://www.gluster.org/wp-content/themes/gluster1/images/logo.png" alt="Gluster.Org" /></a>
+		
+		<div class="social">
+		<div style="width: 85px; float: left;"><iframe src="http://www.facebook.com/plugins/like.php?app_id=110215952409351&amp;href=http%3A%2F%2Fwww.facebook.com%2FGlusterInc&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe></div>
+		<div style="width: 50px; float: left; margin-top: -2px;"><g:plusone count="false"></g:plusone></div>
+		<div style="width: 80px; float: left;"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a></div>
+		
+		<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+		<!--  Place this tag after the last plusone tag -->
+		<script type="text/javascript">
+		  (function() {
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		  })();
+		</script>
+		</div>
+		
+		<div id="right">
+		<span>This project sponsored by <a href="http://www.redhat.com/">Red Hat, Inc.</a> &#8250;</span>
+		
+		<nav>
+		<ul>
+			<li><a href="http://www.gluster.org/community/documentation/index.php/Main_Page" target="_blank"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/documentation.png" alt="Documentation" /></a></li>
+			<li><a href="http://www.gluster.org/interact"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/contact.png" alt="Contact" /></a></li>
+			<li><a href="http://www.gluster.org/about/"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/about.png" alt="About" /></a></li>
+			<li><a href="http://www.gluster.org/community/documentation/index.php/Developers"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/developers.png" alt="Developers" /></a></li>
+			<li><a href="http://www.gluster.org/download"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/download.png" alt="Download" /></a></li>
+		</ul>
+		</nav>
+		
+		<form method="get" id="searchform" action="http://community.gluster.org/search/">
+<!--<form method="get" id="searchform" action="http://gluster.org/">-->
+		<input type="text" class="field" name="q" id="q" placeholder="Search the Knowledge Base" />
+		<input type="submit" class="submit" name="submit" id="searchsubmit" value="" />
+		</form>
+		
+		</div>
+	</header>
+
+<div id="content">
+
+	<article>
+	<span class="author">by <a href="http://www.gluster.org/author/kkeithley/" title="Posts by kkeithley" rel="author">kkeithley</a> on September 17, 2012</span>
+	<div class="previous fright gray-button btn"><a href="/blog">&larr; Return to Blog Home</a></div>
+	<h2><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/">Howto: Using UFO (swift) — A Quick Setup Guide</a></h2>
+	<p>This sets up a GlusterFS Unified File and Object (UFO) server on a single node (single brick) Gluster server using the RPMs contained in my YUM repo at <a href="http://repos.fedorapeople.org/repos/kkeithle/glusterfs/">http://repos.fedorapeople.org/repos/kkeithle/glusterfs/</a>. This repo contains RPMs for Fedora 16, Fedora 17, and RHEL 6.</p>
+<p>1. Add the repo to your system. See the README file there for instructions. N.B. If you&#8217;re using CentOS or some other RHEL clone you&#8217;ll want (need) to add the Fedora EPEL repo — see <a href="http://fedoraproject.org/wiki/EPEL">http://fedoraproject.org/wiki/EPEL</a>.</p>
+<p>2. Install glusterfs and UFO (remember to enable the new repo first):</p>
+<p><code>`yum install glusterfs glusterfs-server glusterfs-fuse glusterfs-swift glusterfs-swift-account glusterfs-swift-container glusterfs-swift-object glusterfs-swift-proxy glusterfs-ufo`</code></p>
+<p>3. Start glusterfs:</p>
+<ul>
+<li>On Fedora 17, Fedora 18: <code>`systemctl start glusterd.service`</code></li>
+<li>On Fedora 16 or  RHEL 6 <code>`service start glusterd`</code></li>
+<li><code></code>On CentOS6.x <code>`/etc/init.d/glusterd start`</code></li>
+</ul>
+<p>4. Create a glusterfs volume:<br />
+<code>`gluster volume create $myvolname $myhostname:$pathtobrick`</code></p>
+<p>5. Start the glusterfs volume:<br />
+<code>`gluster volume start $myvolname`</code></p>
+<p>6. Create a self-signed cert for UFO:<br />
+<code>`cd /etc/swift; openssl req -new -x509 -nodes -out cert.crt -keyout cert.key`</code></p>
+<p>7. fixup some files in /etc/swift:</p>
+<ul>
+<li><code>`mv swift.conf-gluster swift.conf`</code></li>
+<li><code>`mv fs.conf-gluster fs.conf`</code></li>
+<li><code>`mv proxy-server.conf-gluster proxy-server.conf`</code></li>
+<li><code>`mv account-server/1.conf-gluster account-server/1.conf`</code></li>
+<li><code>`mv container-server/1.conf-gluster container-server/1.conf`</code></li>
+<li><code>`mv object-server/1.conf-gluster object-server/1.conf`</code></li>
+<li><code>`rm {account,container,object}-server.conf</code></li>
+</ul>
+<p>8. Configure UFO (edit /etc/swift/proxy-server.conf):<br />
++ add your cert and key to the [DEFAULT] section:<br />
+bind_port = 443<br />
+cert_file = /etc/swift/cert.crt<br />
+key_file = /etc/swift/cert.key<br />
++ add one or more users of the gluster volume to the [filter:tempauth] section:<br />
+user_$myvolname_$username=$password .admin<br />
++ add the memcache address to the [filter:cache] section:<br />
+memcache_servers = 127.0.0.1:11211</p>
+<p>9. Generate builders:<br />
+<code>`/usr/bin/gluster-swift-gen-builders $myvolname`</code></p>
+<p>10. Start memcached:</p>
+<ul>
+<li>On Fedora 17: <code>`systemctl start memcached.service`</code></li>
+<li>On Fedora 16 or  RHEL 6 <code>`service start memcached`</code></li>
+<li><code></code>On CentOS6.x <code>`/etc/init.d/memcached start`</code></li>
+</ul>
+<p>11. Start UFO:</p>
+<p><code>`swift-init main start`</code></p>
+<p>» This has bitten me more than once. If you ssh -X into the machine running swift, it&#8217;s likely that sshd will already be using ports 6010, 6011, and 6012, and will collide with the swift processes trying to use those ports «</p>
+<p>12. Get authentication token from UFO:<br />
+<code>`curl -v -H 'X-Storage-User: $myvolname:$username' -H 'X-Storage-Pass: $password' -k https://$myhostname:443/auth/v1.0`</code><br />
+(authtoken similar to AUTH_tk2c69b572dd544383b352d0f0d61c2e6d)</p>
+<p>13. Create a container:<br />
+<code>`curl -v -X PUT -H 'X-Auth-Token: $authtoken' https://$myhostname:443/v1/AUTH_$myvolname/$mycontainername -k`</code></p>
+<p>14. List containers:<br />
+<code>`curl -v -X GET -H 'X-Auth-Token: $authtoken' https://$myhostname:443/v1/AUTH_$myvolname -k`</code></p>
+<p>15. Upload a file to a container:</p>
+<p><code>`curl -v -X PUT -T $filename -H 'X-Auth-Token: $authtoken' -H 'Content-Length: $filelen' https://$myhostname:443/v1/AUTH_$myvolname/$mycontainername/$filename -k`</code></p>
+<p>16. Download the file:</p>
+<p><code>`curl -v -X GET -H 'X-Auth-Token: $authtoken' https://$myhostname:443/v1/AUTH_$myvolname/$mycontainername/$filename -k &gt; $filename`<br />
+</code></p>
+<p>More information and examples are available from</p>
+<ul>
+<li><a href="http://docs.openstack.org/api/openstack-object-storage/1.0/content/">http://docs.openstack.org/api/openstack-object-storage/1.0/content/</a></li>
+<li><a href="https://access.redhat.com/knowledge/docs/en-US/Red_Hat_Storage/2.0/pdf/Administration_Guide/Red_Hat_Storage-2.0-Administration_Guide-en-US.pdf">https://access.redhat.com/knowledge/docs/en-US/Red_Hat_Storage/2.0/pdf/Administration_Guide/Red_Hat_Storage-2.0-Administration_Guide-en-US.pdf</a></li>
+<li><a href="http://docs.openstack.org/developer/swift/howto_installmultinode.html">http://docs.openstack.org/developer/swift/howto_installmultinode.html</a></li>
+</ul>
+<p>=======================================================================</p>
+<p>N.B. We (Red Hat, Gluster) generally recommend using xfs for brick volumes; or if you&#8217;re feeling brave, btrfs. If you&#8217;re using ext4 be aware of the ext4 issue* and if you&#8217;re using ext3 make sure you mount it with -o user_xattr.</p>
+<p>* http://joejulian.name/blog/glusterfs-bit-by-ext4-structure-change/</p>
+	</article>
+	<div class="social">
+		<div style="width: 85px; float: left;"><iframe src="http://www.facebook.com/plugins/like.php?app_id=110215952409351&amp;href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FGluster%2F80854864899&amp;send=false&amp;layout=button_count&amp;width=450&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:450px; height:21px;" allowTransparency="true"></iframe></div>
+		<div style="width: 50px; float: left; margin-top: -2px;"><g:plusone count="false"></g:plusone></div>
+		<div style="width: 80px; float: left;"><a href="http://twitter.com/share" class="twitter-share-button" data-count="none">Tweet</a></div>
+		
+		<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+
+		<!--  Place this tag after the last plusone tag -->
+		<script type="text/javascript">
+		  (function() {
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		  })();
+		</script>
+	</div>
+	<div class="tags clearfix">
+			</div>
+
+			<div id="comments">
+
+
+			<h3 id="comments-title">20 Comments</h3>
+
+
+			<ol class="commentlist">
+						<li class="pingback even thread-even depth-1" id="comment-2638">
+				<div id="div-comment-2638" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn"><a href='http://blog.jebpages.com/archives/a-buzzword-packed-return-to-gluster-ufo/' rel='external nofollow' class='url'>A Buzzword-Packed Return to Gluster UFO | jebpages</a></cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-2638">
+			October 11, 2012 at 9:52 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=2638" title="Edit comment">(Edit)</a>		</div>
+
+		<p>[...] little while back, I tested out the Unified File and Object feature in Gluster 3.3, which taps OpenStack&#8217;s Swift component to handle the object half of the file and object combo. It took me kind of a long time to [...]</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-19309">
+				<div id="div-comment-19309" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-19309">
+			December 16, 2012 at 2:50 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=19309" title="Edit comment">(Edit)</a>		</div>
+
+		<p>Thanks for the howto document! I&#8217;m looking to test this out for a project I&#8217;m working on, so this was very helpful. One thing though&#8230; when I try to perform step 7, I see that /etc/swift just contains a few empty directories, and not the files you have indicated. Does this imply that I forgot to install a package? Thanks!</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment byuser comment-author-kkeithley bypostauthor even thread-even depth-1" id="comment-19353">
+				<div id="div-comment-19353" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">kkeithley</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-19353">
+			December 17, 2012 at 6:02 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=19353" title="Edit comment">(Edit)</a>		</div>
+
+		<p>I missed an edit when I updated the post. Install the glusterfs-swift-ufo rpm — instead of glusterfs-swift-plugin rpm — and you&#8217;ll get the files you need.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-19358">
+				<div id="div-comment-19358" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-19358">
+			December 17, 2012 at 11:34 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=19358" title="Edit comment">(Edit)</a>		</div>
+
+		<p>That fixed it&#8230; thanks! Once again, great howto. Thanks for putting it together.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment even thread-even depth-1" id="comment-19370">
+				<div id="div-comment-19370" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-19370">
+			December 17, 2012 at 5:04 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=19370" title="Edit comment">(Edit)</a>		</div>
+
+		<p>Hmm&#8230; new issue. Everything seems to work great, except for downloading files. No matter how I try to do it (curl, swift, etc) I wind up with a 503 Internal Server Error. The errors printed in /var/log/messages are too long to list here, but here&#8217;s a small sample:</p>
+<p>Dec 17 10:00:37 37 object-server ERROR __call__ error with GET /bank0/0/AUTH_bank0/testcontainer/test_file : #012Traceback (most recent call last):#012  File &#8220;/usr/lib/python2.6/site-packages/swift/obj/server.py&#8221;, line 892, in __call__#012    res = method(req)#012  File &#8220;/usr/lib/python2.6/site-packages/swift/common/utils.py&#8221;, line 1350, in wrapped#012    return func(*a, **kw)#012  File &#8220;/usr/lib/python2.6/site-packages/swift/obj/server.py&#8221;, line 677, in GET#012    iter_hook=sleep)#012TypeError: __init__() got an unexpected keyword argument &#8216;iter_hook&#8217; (txn: tx47b9a96c72424f1889bbeb976d185498)<br />
+Dec 17 10:00:37 37 object-server 127.0.0.1 &#8211; - [17/Dec/2012:18:00:37 +0000] &#8220;GET /bank0/0/AUTH_bank0/testcontainer/test_file&#8221; 500 425 &#8220;-&#8221; &#8220;tx47b9a96c72424f1889bbeb976d185498&#8243; &#8220;-&#8221; 0.0013<br />
+Dec 17 10:00:37 37 proxy-server ERROR 500 Traceback (most recent call last):#012  File &#8220;/usr/lib/python2.6/site-packages/swift/obj/server.py&#8221;, line 892, in __call__#012    res = method(req)#012  File &#8220;/usr/lib/python2.6/site-packages/swift/common/utils.py&#8221;, line 1350, in wrapped#012    return func(*a, **kw)#012  File &#8220;/usr/lib/python2.6/site-packages/swift/obj/server.py&#8221;, line 677, in GET#012    iter_hook=sleep)#012TypeError: __init__() got an unexpected keyword argument &#8216;iter_hook&#8217;#012 From Object Server 127.0.0.1:6010 (txn: tx47b9a96c72424f1889bbeb976d185498) (client_ip: 172.16.1.9)<br />
+Dec 17 10:00:37 37 proxy-server Object GET returning 503 for [500] (txn: tx47b9a96c72424f1889bbeb976d185498) (client_ip: 172.16.1.9)</p>
+<p>Any ideas? Everything else works so perfectly. And by the way, the swift client and the glusterfs server are on the same private vlan, no firewall between them.</p>
+<p>And finally, the command I executed to download:</p>
+<p>swift -A <a href="https://$hostname:443/auth/v1.0" rel="nofollow">https://$hostname:443/auth/v1.0</a> -U $volume:$user -K $password download $container $file</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment byuser comment-author-kkeithley bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-19534">
+				<div id="div-comment-19534" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">kkeithley</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-19534">
+			December 21, 2012 at 11:31 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=19534" title="Edit comment">(Edit)</a>		</div>
+
+		<p>New RPMs are available in my fedorapeople.org yum repo to fix the bug.</p>
+<p>Note that one of the RPMs has been renamed: glusterfs-swift-plugin -&gt; glusterfs-swift-ufo -&gt; glusterfs-ufo. I found that an orderinary update didn&#8217;t work and I had to first remove, then add. All your volume files and swift configuration will be retained.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment even thread-even depth-1" id="comment-19763">
+				<div id="div-comment-19763" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-19763">
+			December 26, 2012 at 3:42 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=19763" title="Edit comment">(Edit)</a>		</div>
+
+		<p>I got the correct packages installed, and that did fix the errors I listed above. But now, all downloads stall after downloading the first 65536 (2^16) bytes. I&#8217;ve only tested with curl and the swift client. But I don&#8217;t see anything in any configurations that would impose this limit. Any ideas?</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-20415">
+				<div id="div-comment-20415" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-20415">
+			January 3, 2013 at 4:34 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=20415" title="Edit comment">(Edit)</a>		</div>
+
+		<p>Is anyone else using this and noticing that downloads stall after the first 64K bytes (65536 to be exact)?</p>
+<p>I&#8217;ve tried tweaking the settings to avoid this. For example, setting &#8216;object_chunk_size&#8217; and &#8216;client_chunk_size&#8217; in proxy-server.conf to larger sizes, but that doesn&#8217;t help. I&#8217;ve set them as large as 1GB.</p>
+<p>The only way I can successfully download anything larger than 64k is if I first upload it via the swift client and use &#8216;-S 65536&#8242; to make sure it breaks the file up into 64K segments or smaller.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment byuser comment-author-kkeithley bypostauthor even thread-even depth-1" id="comment-20451">
+				<div id="div-comment-20451" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">kkeithley</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-20451">
+			January 4, 2013 at 4:46 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=20451" title="Edit comment">(Edit)</a>		</div>
+
+		<p>We&#8217;re working on a fix for the download stall.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-20827">
+				<div id="div-comment-20827" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-20827">
+			January 8, 2013 at 1:08 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=20827" title="Edit comment">(Edit)</a>		</div>
+
+		<p>That&#8217;s great news! I&#8217;ll look forward to that.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment byuser comment-author-kkeithley bypostauthor even thread-even depth-1" id="comment-21095">
+				<div id="div-comment-21095" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">kkeithley</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-21095">
+			January 10, 2013 at 12:00 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=21095" title="Edit comment">(Edit)</a>		</div>
+
+		<p>I&#8217;ve just put up new RPMs with the fix in my fedorapeople.org yum repository.</p>
+<p>3.3.1-8, for fedora 16, fedora 17, epel 5, epel 6, and rhel 7 beta.</p>
+<p>RPMs for fedora 18 will appear in the updates yum repo after the requisite testing period, after f18 ships in a few days.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-21281">
+				<div id="div-comment-21281" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-21281">
+			January 11, 2013 at 5:54 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=21281" title="Edit comment">(Edit)</a>		</div>
+
+		<p>I installed the updates, and so far, so good! I&#8217;m only playing around with file sizes less than 2GB. But when I get some time, I&#8217;ll be pushing larger stuff (~200GB ProRes video files). I imagine that will require some config tweaks to allow to work, and to deal with Swift&#8217;s 5GB limits.</p>
+<p>Thanks for the help once again!</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment even thread-even depth-1" id="comment-21524">
+				<div id="div-comment-21524" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Kaleb</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-21524">
+			January 14, 2013 at 4:44 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=21524" title="Edit comment">(Edit)</a>		</div>
+
+		<p>UFO ships with the 5GB limit already disabled.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-22064">
+				<div id="div-comment-22064" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-22064">
+			January 17, 2013 at 1:51 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=22064" title="Edit comment">(Edit)</a>		</div>
+
+		<p>I can confirm uploads/downloads of 200GB+ with no issues. It&#8217;s stressing the NICs on my servers, but that isn&#8217;t Swift&#8217;s fault! Thanks for the guide, and especially thanks for rapidly responding with updates to the packages, etc.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment even thread-even depth-1" id="comment-23178">
+				<div id="div-comment-23178" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Sachin</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-23178">
+			January 23, 2013 at 11:26 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=23178" title="Edit comment">(Edit)</a>		</div>
+
+		<p>Hi there,</p>
+<p>Thanks for the guide. Before I start, I wanted to learn of there is any performance/benchmark study on this way of doing the Object store. Reason to ask is that Openstack Swift is really sub-optimal in RAID back-ends (since it does may small writes) as noted here</p>
+<p><a href="http://docs.openstack.org/trunk/openstack-object-storage/admin/content/raid.html" rel="nofollow">http://docs.openstack.org/trunk/openstack-object-storage/admin/content/raid.html</a></p>
+<p>On the other hand, any sizable Gluster deployment probably uses RAID in a big way &#8211; irc has several conversations around how to setup a big Gluster deployment (and this uses RAID). See for example</p>
+<p><a href="http://irclog.perlgeek.de/gluster/2012-12-01" rel="nofollow">http://irclog.perlgeek.de/gluster/2012-12-01</a></p>
+<p>So, any benchmarks anyone has with UFO?</p>
+<p>Thanks in advance!</p>
+<p>-Sachin</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment odd alt thread-odd thread-alt depth-1" id="comment-24631">
+				<div id="div-comment-24631" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Rob</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-24631">
+			January 28, 2013 at 7:13 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=24631" title="Edit comment">(Edit)</a>		</div>
+
+		<p>@sachin &#8211; I haven&#8217;t done any really scientific benchmarking, but I did some throughput tests to ensure the content I am storing on GlusterFS volumes is accessible with a reasonable degree of performance. In my tests, I was moving files ranging in size between 30GB and 200GB, and in all cases, with UFO, I was seeing ~120-130Mbps tranfser rates&#8230; and this is using 36 x 3TB SATA drives in RAID6 under my GlusterFS volumes, the volumes are replica 2 in my case. I haven&#8217;t done rebuild tests under load on the RAID6 arrays, but I will be doing that later this week. If it takes weeks, as the Rackspace documentation you linked to indicates, then yeah that will be terrible. I have slightly smaller RAID6 arrays that can rebuild in a matter of hours, so I&#8217;m hopeful. Hope this helps&#8230;</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment even thread-even depth-1" id="comment-34146">
+				<div id="div-comment-34146" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Patrick McShane</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-34146">
+			March 4, 2013 at 1:33 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=34146" title="Edit comment">(Edit)</a>		</div>
+
+		<p>Hi there,</p>
+<p>The gist of the problem we&#8217;re seeing occurs when we&#8217;re doing test uploads of file parts using curl (i.e. foo/test_file.dat/01, foo/test_file.dat/02, &#8230;) and using the &#8220;X-Object-Manifest&#8221; header to allow for downloading the parts as a single file.   Uploads/downloads (from 1GB to 20GB in size) of individual files always works just fine.  </p>
+<p>It&#8217;s only when we try to bind the parts using X-Object-Manifest that we&#8217;re unable to download them back into to a single large file.</p>
+<p>Curl reports a 503 error immediately when the multipart download is attempted.</p>
+<p>We&#8217;re using openstack folsom build running on CentOS 6.3 x86_64 (using KVM &#8211; from the EPEL repo).   </p>
+<p>See curl commands and resulting tracebacks in /var/log/messages below.</p>
+<p>Here is our package recipe on CentOS 6.3 x86_64.<br />
+[root@sd-pigshead ~]# rpm -qa|grep glust<br />
+glusterfs-fuse-3.3.1-10.el6.x86_64<br />
+glusterfs-swift-proxy-3.3.1-10.el6.noarch<br />
+glusterfs-3.3.1-10.el6.x86_64<br />
+glusterfs-swift-container-3.3.1-10.el6.noarch<br />
+glusterfs-ufo-3.3.1-10.el6.noarch<br />
+glusterfs-swift-3.3.1-10.el6.noarch<br />
+glusterfs-swift-account-3.3.1-10.el6.noarch<br />
+glusterfs-swift-object-3.3.1-10.el6.noarch<br />
+glusterfs-server-3.3.1-10.el6.x86_64<br />
+[root@sd-pigshead ~]# rpm -qa|egrep &#8220;openstack|glust&#8221;<br />
+glusterfs-fuse-3.3.1-10.el6.x86_64<br />
+openstack-glance-2012.2.3-1.el6.noarch<br />
+openstack-nova-objectstore-2012.2.2-1.el6.noarch<br />
+openstack-utils-2013.1-1.el6.noarch<br />
+glusterfs-swift-proxy-3.3.1-10.el6.noarch<br />
+openstack-nova-volume-2012.2.2-1.el6.noarch<br />
+openstack-nova-2012.2.2-1.el6.noarch<br />
+openstack-keystone-2012.2.1-1.el6.noarch<br />
+glusterfs-3.3.1-10.el6.x86_64<br />
+glusterfs-swift-container-3.3.1-10.el6.noarch<br />
+glusterfs-ufo-3.3.1-10.el6.noarch<br />
+openstack-nova-common-2012.2.2-1.el6.noarch<br />
+openstack-nova-api-2012.2.2-1.el6.noarch<br />
+python-django-openstack-auth-1.0.2-3.el6.noarch<br />
+openstack-dashboard-2012.2.1-1.el6.noarch<br />
+glusterfs-swift-3.3.1-10.el6.noarch<br />
+glusterfs-swift-account-3.3.1-10.el6.noarch<br />
+openstack-nova-console-2012.2.2-1.el6.noarch<br />
+openstack-nova-cert-2012.2.2-1.el6.noarch<br />
+openstack-quantum-2012.2.1-1.el6.noarch<br />
+glusterfs-swift-object-3.3.1-10.el6.noarch<br />
+openstack-nova-scheduler-2012.2.2-1.el6.noarch<br />
+openstack-cinder-2012.2.1-1.el6.noarch<br />
+glusterfs-server-3.3.1-10.el6.x86_64<br />
+openstack-nova-network-2012.2.2-1.el6.noarch<br />
+openstack-nova-compute-2012.2.2-1.el6.noarch</p>
+<p>curl -v -X PUT -H &#8220;X-Auth-Token: ${AUTHTOKEN}&#8221; -H &#8220;Content-Length: ${FILELEN}&#8221; $URLBASE/${DIRNAME}/`basename ${FILENAME}`/00 &#8211;data-binary @${FILENAME}_00<br />
+curl -v -X PUT -H &#8220;X-Auth-Token: ${AUTHTOKEN}&#8221; -H &#8220;Content-Length: ${FILELEN}&#8221; $URLBASE/${DIRNAME}/`basename ${FILENAME}`/01 &#8211;data-binary @${FILENAME}_01<br />
+&#8230;</p>
+<p>curl -v -X PUT -H &#8220;X-Auth-Token: ${AUTHTOKEN}&#8221; -H &#8216;Content-Length: 0&#8242; -H &#8220;X-Object-Manifest: $DIRNAME/`basename $FILENAME`/&#8221; $URLBASE/$DIRNAME/`basename $FILENAME` &#8211;data-binary &#8221;</p>
+<p>curl -v -H &#8220;X-Auth-Token: ${AUTHTOKEN}&#8221; $URLBASE/${DIRNAME}/`basename ${FILENAME}` &gt;`basename $FILENAME`_downloaded</p>
+<p>######### /var/log/messages ##########</p>
+<p>Mar  4 10:24:01 sd-pigshead container-server 127.0.0.1 &#8211; - [04/Mar/2013:10:24:01 +0000] &#8220;PUT /data-volume/0/AUTH_data-volume/create_dir_test/test_file.dat&#8221; 201 &#8211; &#8220;tx9766153aca824b77954cd96b996645c2&#8243; &#8220;-&#8221; &#8220;-&#8221; 0.0010<br />
+Mar  4 10:24:01 sd-pigshead object-server 127.0.0.1 &#8211; - [04/Mar/2013:10:24:01 +0000] &#8220;PUT /data-volume/0/AUTH_data-volume/create_dir_test/test_file.dat&#8221; 201 &#8211; &#8220;-&#8221; &#8220;tx9766153aca824b77954cd96b996645c2&#8243; &#8220;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.13.1.0 zlib/1.2.3 libidn/1.18 libssh2/1.2.2&#8243; 0.0450<br />
+Mar  4 10:24:01 sd-pigshead container-server 127.0.0.1 &#8211; - [04/Mar/2013:10:24:01 +0000] &#8220;GET /data-volume/0/AUTH_data-volume/create_dir_test&#8221; 200 &#8211; &#8220;txa396989286234612969f82de55ef9862&#8243; &#8220;-&#8221; &#8220;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.13.1.0 zlib/1.2.3 libidn/1.18 libssh2/1.2.2&#8243; 0.0224<br />
+Mar  4 10:24:01 sd-pigshead object-server 127.0.0.1 &#8211; - [04/Mar/2013:10:24:01 +0000] &#8220;GET /data-volume/0/AUTH_data-volume/create_dir_test/test_file.dat&#8221; 200 &#8211; &#8220;-&#8221; &#8220;tx029ac6fcfb464d199bd92e1b1393a508&#8243; &#8220;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.13.1.0 zlib/1.2.3 libidn/1.18 libssh2/1.2.2&#8243; 0.0009<br />
+Mar  4 10:24:01 sd-pigshead proxy-server ERROR with Object server 127.0.0.1:6010/data-volume re: Trying to GET /v1/AUTH_data-volume/create_dir_test/test_file.dat: #012Traceback (most recent call last):#012  File &#8220;/usr/lib/python2.6/site-packages/swift/proxy/controllers/base.py&#8221;, line 595, in GETorHEAD_base#012    possible_source = conn.getresponse()#012  File &#8220;/usr/lib/python2.6/site-packages/swift/common/bufferedhttp.py&#8221;, line 102, in getresponse#012    response = HTTPConnection.getresponse(self)#012  File &#8220;/usr/lib64/python2.6/httplib.py&#8221;, line 990, in getresponse#012    response.begin()#012  File &#8220;/usr/lib64/python2.6/httplib.py&#8221;, line 391, in begin#012    version, status, reason = self._read_status()#012  File &#8220;/usr/lib64/python2.6/httplib.py&#8221;, line 355, in _read_status#012    raise BadStatusLine(line)#012BadStatusLine (txn: tx029ac6fcfb464d199bd92e1b1393a508) (client_ip: 10.12.33.224)<br />
+Mar  4 10:24:01 sd-pigshead proxy-server Object GET returning 503 for [] (txn: tx029ac6fcfb464d199bd92e1b1393a508) (client_ip: 10.12.33.224)</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment byuser comment-author-johnmark odd alt thread-odd thread-alt depth-1" id="comment-34227">
+				<div id="div-comment-34227" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn"><a href='http://www.gluster.org/' rel='external nofollow' class='url'>johnmark</a></cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-34227">
+			March 4, 2013 at 7:39 pm</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=34227" title="Edit comment">(Edit)</a>		</div>
+
+		<p>Patrick &#8211; I would recommend you bring this up in #gluster on IRC or on the gluster-users mailing list.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment even thread-even depth-1" id="comment-40514">
+				<div id="div-comment-40514" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">Andreas Calvo</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-40514">
+			April 11, 2013 at 6:59 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=40514" title="Edit comment">(Edit)</a>		</div>
+
+		<p>When uploading large files, it seems that swift is failing:<br />
+Apr 11 15:56:16 DFS1 proxy-server ERROR with Object server 127.0.0.1:6010/testvol re: Trying to write to /v1/AUTH_testvol/vol2/HP_Service_Pack_for_Proliant_2012.10.0-0_713293-001_spp_2012.10.0-SPP2012100.2012_1005.37.iso: ChunkWriteTimeout (10s)<br />
+Apr 11 15:56:16 DFS1 proxy-server Object PUT exceptions during send, 0/1 required connections (txn: tx3552094ea43b467ab88a53075e32cb3a) (client_ip: 10.0.96.43)</p>
+<p>Using 2 nodes (2 bricks replica) with 1 proxy server.</p>
+<p>Is it necessary to tweak swift to allow uploading large files?</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+		<li class="comment byuser comment-author-kkeithley bypostauthor odd alt thread-odd thread-alt depth-1" id="comment-40642">
+				<div id="div-comment-40642" class="comment-body">
+				<div class="comment-author vcard">
+				<cite class="fn">kkeithley</cite> <span class="says">says:</span>		</div>
+
+		<div class="comment-meta commentmetadata"><a href="http://www.gluster.org/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/comment-page-1/#comment-40642">
+			April 12, 2013 at 7:49 am</a>&nbsp;&nbsp;<a class="comment-edit-link" href="http://www.gluster.org/wp-admin/comment.php?action=editcomment&amp;c=40642" title="Edit comment">(Edit)</a>		</div>
+
+		<p>As indicated above (14 Jan 2013), Gluster-Swift comes out-of-the-box with the file size limit disabled.</p>
+<p>If you&#8217;re using 3.4.0alpha or 3.4.0alpha2, Gluster-Swift is broken in those releases.</p>
+
+		<div class="reply">
+				</div>
+				</div>
+		</li>
+			</ol>
+
+
+
+								<div id="respond">
+				<h3 id="reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2012/09/howto-using-ufo-swift-a-quick-and-dirty-setup-guide/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://www.gluster.org/wp-comments-post.php" method="post" id="commentform">
+																			<p class="logged-in-as">Logged in as <a href="http://www.gluster.org/wp-admin/profile.php">johnmark</a>. <a href="http://www.gluster.org/wp-login.php?action=logout&amp;redirect_to=http%3A%2F%2Fwww.gluster.org%2F2012%2F09%2Fhowto-using-ufo-swift-a-quick-and-dirty-setup-guide%2F&amp;_wpnonce=849df536fd" title="Log out of this account">Log out?</a></p>																			<p class="comment-form-comment"><label for="comment">Comment</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p>						<p class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></p>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='1412' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+						<input type="hidden" id="_wp_unfiltered_html_comment_disabled" name="_wp_unfiltered_html_comment_disabled" value="184c66cf85" /><script>(function(){if(window===window.parent){document.getElementById('_wp_unfiltered_html_comment_disabled').name='_wp_unfiltered_html_comment';}})();</script>
+<p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="6bc4647501" /></p>					</form>
+							</div><!-- #respond -->
+						
+</div><!-- #comments -->
+	
+</div>
+
+<div id="sidebar">
+	<h6>Recent Posts</h6>
+	<ul id="sb-archives">
+			<li><a href='http://tropicaldevel.wordpress.com/2013/04/09/free-cache/' title='Free Cache'>Free Cache</a></li>
+	<li><a href='https://ttboj.wordpress.com/2013/04/08/knowing-when-to-release-and-deploy-your-code-and-a-mini-script/' title='Knowing when to release and deploy your code (…and a mini script)'>Knowing when to release and deploy your code (…and a mini script)</a></li>
+	<li><a href='http://www.gluster.org/2013/04/gluster-testing-framework/' title='Gluster Testing Framework'>Gluster Testing Framework</a></li>
+	<li><a href='http://www.gluster.org/2013/04/turning-micro-commits-into-one-megacommit-2/' title='Turning micro-commits into one megacommit'>Turning micro-commits into one megacommit</a></li>
+	<li><a href='http://www.gluster.org/2013/04/turning-micro-commits-into-one-megacommit/' title='Turning micro-commits into one megacommit'>Turning micro-commits into one megacommit</a></li>
+	</ul>
+
+        <h6>Syndicated Blogs</h6>
+        <p>This is a planet site. See all the blogs syndicated here:</p>
+	<ul id="sb-archives">
+		<li><a href="http://blog.celingest.com/en/" title="Amazon Web Services &#8211; APN Advanced Consulting Partner">Celingest Blog &#8211; Feel the Cloud » GlusterFS</a></li>
+<li><a href="http://conrey.org" title="fermentation and virtualization madness">conrey.org » gluster</a></li>
+<li><a href="http://devincharge.com">Developer in Charge » gluster</a></li>
+<li><a href="http://haerench.blogspot.com/">Est modus matulae</a></li>
+<li><a href="http://glusterhacker.blogspot.com/" title="My GlusterFS Anecdotes">Gluster Hacker</a></li>
+<li><a href="http://raghavendratalur.in/glusterblog">Gluster | Learner &gt; log</a></li>
+<li><a href="http://hekafs.org" title="Formerly known as CloudFS">HekaFS</a></li>
+<li><a href="http://www.howtoforge.com" title="HowtoForge provides user-friendly Linux tutorials about almost every topic.
+
+If you&#8217;ve written a Linux tutorial that you&#8217;d like to share, you can contribute it. If you&#8217;d like to discuss Linux-related problems, you can use our forum. If you have questions,">HowtoForge &#8211; Linux Howtos and Tutorials &#8211; </a></li>
+<li><a href="http://jayunit100.blogspot.com/" title="statelessly yours">jayunit100</a></li>
+<li><a href="http://blog.jebpages.com" title="the official blog of blog.jebpages.com">jebpages » gluster</a></li>
+<li><a href="http://joejulian.name/blog/feeds/rss/" title="The public stuff I&#8217;m working on&#8230;">Joe Julian&#039;s Blog</a></li>
+<li><a href="http://www.middleswarth.net/topic/gluster">Middleswarth &#8211; gluster</a></li>
+<li><a href="http://blog.nixpanic.net/search/label/Gluster">Nixpanic&#8217;s Blog</a></li>
+<li><a href="http://technosophos.com/taxonomy/term/187/0">TechnoSophos &#8211; gluster</a></li>
+<li><a href="https://ttboj.wordpress.com" title="Technical discussion, articles and writeups!">The Technical Blog of James » gluster</a></li>
+<li><a href="http://tropicaldevel.wordpress.com" title="Bits of code from the pacific">Tropical Devel » OpenStack</a></li>
+<li><a href="http://vbellur.wordpress.com" title="Life, Technology and a little more&#8230;">Vijay Bellur</a></li>
+	</ul>
+	
+	<form method="get" id="searchform" action="http://community.gluster.org/search/">
+		<input type="text" class="field" name="q" id="q" placeholder="Search Keyword" />
+		<input type="submit" class="submit" name="submit" id="searchsubmit" value="" />
+		</form>
+
+
+	<div id="sb-cats">
+		<h6>Categories</h6>
+		<ul>
+				<li class="cat-item cat-item-141"><a href="http://www.gluster.org/category/12-10/" title="View all posts filed under 12.10">12.10</a>
+</li>
+	<li class="cat-item cat-item-142"><a href="http://www.gluster.org/category/3-4/" title="View all posts filed under 3.4">3.4</a>
+</li>
+	<li class="cat-item cat-item-59"><a href="http://www.gluster.org/category/android/" title="View all posts filed under Android">Android</a>
+</li>
+	<li class="cat-item cat-item-143"><a href="http://www.gluster.org/category/aws-en/" title="View all posts filed under AWS @en">AWS @en</a>
+</li>
+	<li class="cat-item cat-item-147"><a href="http://www.gluster.org/category/bash/" title="View all posts filed under bash">bash</a>
+</li>
+	<li class="cat-item cat-item-49"><a href="http://www.gluster.org/category/centos/" title="View all posts filed under CentOS">CentOS</a>
+</li>
+	<li class="cat-item cat-item-132"><a href="http://www.gluster.org/category/cloud/" title="View all posts filed under cloud">cloud</a>
+</li>
+	<li class="cat-item cat-item-52"><a href="http://www.gluster.org/category/debian/" title="View all posts filed under Debian">Debian</a>
+</li>
+	<li class="cat-item cat-item-140"><a href="http://www.gluster.org/category/development/" title="View all posts filed under Development">Development</a>
+</li>
+	<li class="cat-item cat-item-112"><a href="http://www.gluster.org/category/devops/" title="View all posts filed under devops">devops</a>
+</li>
+	<li class="cat-item cat-item-79"><a href="http://www.gluster.org/category/dlm/" title="View all posts filed under dlm">dlm</a>
+</li>
+	<li class="cat-item cat-item-144"><a href="http://www.gluster.org/category/ebs-en/" title="View all posts filed under EBS @en">EBS @en</a>
+</li>
+	<li class="cat-item cat-item-145"><a href="http://www.gluster.org/category/ec2-en/" title="View all posts filed under EC2 @en">EC2 @en</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://www.gluster.org/category/events/" title="View all posts filed under Events">Events</a>
+</li>
+	<li class="cat-item cat-item-38"><a href="http://www.gluster.org/category/fedora/" title="View all posts filed under fedora">fedora</a>
+</li>
+	<li class="cat-item cat-item-93"><a href="http://www.gluster.org/category/file-descriptor/" title="View all posts filed under file descriptor">file descriptor</a>
+</li>
+	<li class="cat-item cat-item-148"><a href="http://www.gluster.org/category/fixme/" title="View all posts filed under FIXME">FIXME</a>
+</li>
+	<li class="cat-item cat-item-115"><a href="http://www.gluster.org/category/foss/" title="View all posts filed under FOSS">FOSS</a>
+</li>
+	<li class="cat-item cat-item-125"><a href="http://www.gluster.org/category/front/" title="View all posts filed under Front">Front</a>
+</li>
+	<li class="cat-item cat-item-73"><a href="http://www.gluster.org/category/git/" title="View all posts filed under git">git</a>
+</li>
+	<li class="cat-item cat-item-74"><a href="http://www.gluster.org/category/github/" title="View all posts filed under github">github</a>
+</li>
+	<li class="cat-item cat-item-39"><a href="http://www.gluster.org/category/gluster/" title="View all posts filed under gluster">gluster</a>
+</li>
+	<li class="cat-item cat-item-114"><a href="http://www.gluster.org/category/gluster-info/" title="View all posts filed under Gluster Info">Gluster Info</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="http://www.gluster.org/category/glusterfs/" title="View all posts filed under glusterfs">glusterfs</a>
+</li>
+	<li class="cat-item cat-item-88"><a href="http://www.gluster.org/category/google-compute-engine/" title="View all posts filed under google compute engine">google compute engine</a>
+</li>
+	<li class="cat-item cat-item-149"><a href="http://www.gluster.org/category/hack/" title="View all posts filed under hack">hack</a>
+</li>
+	<li class="cat-item cat-item-111"><a href="http://www.gluster.org/category/high-availability/" title="View all posts filed under High-Availability">High-Availability</a>
+</li>
+	<li class="cat-item cat-item-32"><a href="http://www.gluster.org/category/howtos/" title="View all posts filed under Howtos">Howtos</a>
+</li>
+	<li class="cat-item cat-item-133"><a href="http://www.gluster.org/category/hpcloud/" title="View all posts filed under hpcloud">hpcloud</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="http://www.gluster.org/category/i-use-tags-instead-of-categories-sorry/" title="View all posts filed under i-use-tags-instead-of-categories-sorry">i-use-tags-instead-of-categories-sorry</a>
+</li>
+	<li class="cat-item cat-item-87"><a href="http://www.gluster.org/category/infrastructure/" title="View all posts filed under infrastructure">infrastructure</a>
+</li>
+	<li class="cat-item cat-item-89"><a href="http://www.gluster.org/category/ios/" title="View all posts filed under iOS">iOS</a>
+</li>
+	<li class="cat-item cat-item-91"><a href="http://www.gluster.org/category/ipv6/" title="View all posts filed under IPv6">IPv6</a>
+</li>
+	<li class="cat-item cat-item-72"><a href="http://www.gluster.org/category/joomla-plugins/" title="View all posts filed under Joomla! Plugins">Joomla! Plugins</a>
+</li>
+	<li class="cat-item cat-item-80"><a href="http://www.gluster.org/category/keepalived/" title="View all posts filed under keepalived">keepalived</a>
+</li>
+	<li class="cat-item cat-item-83"><a href="http://www.gluster.org/category/kvm/" title="View all posts filed under KVM">KVM</a>
+</li>
+	<li class="cat-item cat-item-43"><a href="http://www.gluster.org/category/linux/" title="View all posts filed under Linux">Linux</a>
+</li>
+	<li class="cat-item cat-item-146"><a href="http://www.gluster.org/category/linux-en/" title="View all posts filed under Linux @en">Linux @en</a>
+</li>
+	<li class="cat-item cat-item-121"><a href="http://www.gluster.org/category/make/" title="View all posts filed under make">make</a>
+</li>
+	<li class="cat-item cat-item-34"><a href="http://www.gluster.org/category/mount/" title="View all posts filed under mount">mount</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://www.gluster.org/category/news/" title="View all posts filed under News">News</a>
+</li>
+	<li class="cat-item cat-item-126"><a href="http://www.gluster.org/category/nexenta/" title="View all posts filed under Nexenta">Nexenta</a>
+</li>
+	<li class="cat-item cat-item-14"><a href="http://www.gluster.org/category/open-source/" title="View all posts filed under open source">open source</a>
+</li>
+	<li class="cat-item cat-item-40"><a href="http://www.gluster.org/category/openstack/" title="View all posts filed under openstack">openstack</a>
+</li>
+	<li class="cat-item cat-item-64"><a href="http://www.gluster.org/category/openvz/" title="View all posts filed under OpenVZ">OpenVZ</a>
+</li>
+	<li class="cat-item cat-item-84"><a href="http://www.gluster.org/category/ovirt/" title="View all posts filed under ovirt">ovirt</a>
+</li>
+	<li class="cat-item cat-item-69"><a href="http://www.gluster.org/category/performance/" title="View all posts filed under Performance">Performance</a>
+</li>
+	<li class="cat-item cat-item-150"><a href="http://www.gluster.org/category/pgo/" title="View all posts filed under pgo">pgo</a>
+</li>
+	<li class="cat-item cat-item-37"><a href="http://www.gluster.org/category/post/" title="View all posts filed under post">post</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="http://www.gluster.org/category/puppet/" title="View all posts filed under Puppet">Puppet</a>
+</li>
+	<li class="cat-item cat-item-116"><a href="http://www.gluster.org/category/python/" title="View all posts filed under Python">Python</a>
+</li>
+	<li class="cat-item cat-item-90"><a href="http://www.gluster.org/category/rackspace/" title="View all posts filed under rackspace">rackspace</a>
+</li>
+	<li class="cat-item cat-item-65"><a href="http://www.gluster.org/category/rants-raves/" title="View all posts filed under Rants &amp; Raves">Rants &amp; Raves</a>
+</li>
+	<li class="cat-item cat-item-122"><a href="http://www.gluster.org/category/review/" title="View all posts filed under review">review</a>
+</li>
+	<li class="cat-item cat-item-44"><a href="http://www.gluster.org/category/rhel/" title="View all posts filed under RHEL">RHEL</a>
+</li>
+	<li class="cat-item cat-item-56"><a href="http://www.gluster.org/category/samba/" title="View all posts filed under Samba">Samba</a>
+</li>
+	<li class="cat-item cat-item-42"><a href="http://www.gluster.org/category/software-development/" title="View all posts filed under Software Development">Software Development</a>
+</li>
+	<li class="cat-item cat-item-48"><a href="http://www.gluster.org/category/storage/" title="View all posts filed under Storage">Storage</a>
+</li>
+	<li class="cat-item cat-item-41"><a href="http://www.gluster.org/category/swift/" title="View all posts filed under swift">swift</a>
+</li>
+	<li class="cat-item cat-item-36"><a href="http://www.gluster.org/category/syndicated/" title="View all posts filed under Syndicated">Syndicated</a>
+</li>
+	<li class="cat-item cat-item-134"><a href="http://www.gluster.org/category/system-administration/" title="View all posts filed under system administration">system administration</a>
+</li>
+	<li class="cat-item cat-item-94"><a href="http://www.gluster.org/category/tail-f/" title="View all posts filed under tail -f">tail -f</a>
+</li>
+	<li class="cat-item cat-item-127"><a href="http://www.gluster.org/category/tech/" title="View all posts filed under Tech">Tech</a>
+</li>
+	<li class="cat-item cat-item-151"><a href="http://www.gluster.org/category/todo/" title="View all posts filed under TODO">TODO</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="http://www.gluster.org/category/tutorial/" title="View all posts filed under Tutorial">Tutorial</a>
+</li>
+	<li class="cat-item cat-item-46"><a href="http://www.gluster.org/category/ubuntu/" title="View all posts filed under Ubuntu">Ubuntu</a>
+</li>
+	<li class="cat-item cat-item-1"><a href="http://www.gluster.org/category/uncategorized/" title="View all posts filed under Uncategorized">Uncategorized</a>
+</li>
+	<li class="cat-item cat-item-110"><a href="http://www.gluster.org/category/user-story/" title="View all posts filed under user story">user story</a>
+</li>
+	<li class="cat-item cat-item-81"><a href="http://www.gluster.org/category/vip/" title="View all posts filed under vip">vip</a>
+</li>
+	<li class="cat-item cat-item-50"><a href="http://www.gluster.org/category/virtualbox/" title="View all posts filed under VirtualBox">VirtualBox</a>
+</li>
+	<li class="cat-item cat-item-51"><a href="http://www.gluster.org/category/virtualization/" title="View all posts filed under Virtualization">Virtualization</a>
+</li>
+	<li class="cat-item cat-item-35"><a href="http://www.gluster.org/category/volumes/" title="View all posts filed under volumes">volumes</a>
+</li>
+	<li class="cat-item cat-item-82"><a href="http://www.gluster.org/category/vrrp/" title="View all posts filed under vrrp">vrrp</a>
+</li>
+	<li class="cat-item cat-item-57"><a href="http://www.gluster.org/category/web-server/" title="View all posts filed under Web Server">Web Server</a>
+</li>
+	<li class="cat-item cat-item-152"><a href="http://www.gluster.org/category/xxx/" title="View all posts filed under XXX">XXX</a>
+</li>
+ 
+		</ul>
+	</div>
+
+	<div id="sb-tags">
+		<h6>Tags</h6>
+	<ul><li><a href='http://www.gluster.org/tag/alpha/' title='alpha Tag' class='alpha'>alpha</a></li><li><a href='http://www.gluster.org/tag/awards/' title='awards Tag' class='awards'>awards</a></li><li><a href='http://www.gluster.org/tag/best-in-show/' title='best in show Tag' class='best-in-show'>best in show</a></li><li><a href='http://www.gluster.org/tag/cifs/' title='cifs Tag' class='cifs'>cifs</a></li><li><a href='http://www.gluster.org/tag/citrix-synergy/' title='citrix synergy Tag' class='citrix-synergy'>citrix synergy</a></li><li><a href='http://www.gluster.org/tag/client-mount/' title='client mount Tag' class='client-mount'>client mount</a></li><li><a href='http://www.gluster.org/tag/debian-2/' title='debian Tag' class='debian-2'>debian</a></li><li><a href='http://www.gluster.org/tag/developers/' title='Developers Tag' class='developers'>Developers</a></li><li><a href='http://www.gluster.org/tag/featured/' title='featured Tag' class='featured'>featured</a></li><li><a href='http://www.gluster.org/tag/glusterfs/' title='glusterfs Tag' class='glusterfs'>glusterfs</a></li><li><a href='http://www.gluster.org/tag/jeff-darcy/' title='Jeff Darcy Tag' class='jeff-darcy'>Jeff Darcy</a></li><li><a href='http://www.gluster.org/tag/linuxcon/' title='linuxcon Tag' class='linuxcon'>linuxcon</a></li><li><a href='http://www.gluster.org/tag/new-releases/' title='new releases Tag' class='new-releases'>new releases</a></li><li><a href='http://www.gluster.org/tag/nfs/' title='nfs Tag' class='nfs'>nfs</a></li><li><a href='http://www.gluster.org/tag/pthree/' title='pthree Tag' class='pthree'>pthree</a></li><li><a href='http://www.gluster.org/tag/python/' title='Python Tag' class='python'>Python</a></li><li><a href='http://www.gluster.org/tag/qa/' title='Q&amp;A Tag' class='qa'>Q&amp;A</a></li><li><a href='http://www.gluster.org/tag/saas-cloud-computing-cloud-storage-drupal-gardens-drupal-acquia-gluster/' title='saas cloud computing cloud storage drupal gardens drupal acquia gluster Tag' class='saas-cloud-computing-cloud-storage-drupal-gardens-drupal-acquia-gluster'>saas cloud computing cloud storage drupal gardens drupal acquia gluster</a></li><li><a href='http://www.gluster.org/tag/samba-2/' title='samba Tag' class='samba-2'>samba</a></li><li><a href='http://www.gluster.org/tag/small-files/' title='small files Tag' class='small-files'>small files</a></li><li><a href='http://www.gluster.org/tag/storage-volume/' title='storage volume Tag' class='storage-volume'>storage volume</a></li><li><a href='http://www.gluster.org/tag/synergy-buzz/' title='synergy buzz Tag' class='synergy-buzz'>synergy buzz</a></li><li><a href='http://www.gluster.org/tag/testing/' title='testing Tag' class='testing'>testing</a></li><li><a href='http://www.gluster.org/tag/tom-trainer/' title='tom trainer Tag' class='tom-trainer'>tom trainer</a></li><li><a href='http://www.gluster.org/tag/trends/' title='trends Tag' class='trends'>trends</a></li><li><a href='http://www.gluster.org/tag/user-stories/' title='user stories Tag' class='user-stories'>user stories</a></li><li><a href='http://www.gluster.org/tag/video/' title='video Tag' class='video'>video</a></li><li><a href='http://www.gluster.org/tag/winning/' title='winning Tag' class='winning'>winning</a></li><li><a href='http://www.gluster.org/tag/xen/' title='xen Tag' class='xen'>xen</a></li></ul> 
+	</div>
+	<div class="clearfix"></div>
+
+	<div class="widget"><h3>Upcoming Events</h3>			<div class="textwidget"><h3>User Groups and Meetups</h3>
+<ul>
+<li><a href="/meetups/">See upcoming events</a></li>
+<li><a href="http://www.meetup.com/glusterfs/" target="_blank">Start a GlusterFS community</a></li>
+</ul></div>
+		</div><div class="widget"><h3>GlusterFS 3.3 Now Available</h3>			<div class="textwidget"><ul>
+<li>Object storage, HDFS compatibility, Proactive self-healing
+<li>Plus bug fixes and performance enhancements</li>
+<li><a href="/download/"><b>Download now</b></a></li>
+</ul></div>
+		</div>
+</div>
+	<footer>
+		<p class="left">Copyright &copy; 2012 Red Hat, Inc. All Rights Reserved | <a href="http://www.gluster.org/legal/">Legal &amp; Privacy</a></p>
+		<p class="right">
+		<a href="http://www.facebook.com/GlusterInc"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/facebook.png" alt="Facebook" /></a>
+		<a href="http://twitter.com/GlusterOrg"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/twitter.png" alt="Twitter" /></a>
+		<a href="http://www.youtube.com/GlusterStorage"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/youtube.png" alt="Youtube" /></a>
+		<a href="#"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/linkedin.png" alt="LinkedIn" /></a>
+		<a href="http://www.slideshare.net/Gluster"><img src="http://www.gluster.org/wp-content/themes/gluster1/images/slideshare.png" alt="Slideshare" /></a>
+		</p>
+	</footer>
+
+</div>
+
+<script src="http://twitter.com/javascripts/blogger.js" type="text/javascript"></script>
+<script src="http://twitter.com/statuses/user_timeline/glusterorg.json?callback=twitterCallback2&count=4" type="text/javascript"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10444844-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<div id="un-thankyou" style="display: none;">
+	<h2>Thank you</h2>
+	<p>
+		Your feedback have been received.	</p>
+	<a href="#" id="un-feedback-close"><img src="http://www.gluster.org/wp-content/plugins/usernoise/images/ok.png" id="thankyou-image" alt="Close"></a>
+</div>
+<script type='text/javascript' src='http://www.gluster.org/wp-includes/js/admin-bar.min.js?ver=3.5.1'></script>
+	<script type="text/javascript">
+		(function() {
+			var request, b = document.body, c = 'className', cs = 'customize-support', rcs = new RegExp('(^|\\s+)(no-)?'+cs+'(\\s+|$)');
+
+			request = true;
+
+			b[c] = b[c].replace( rcs, ' ' );
+			b[c] += ( window.postMessage && request ? ' ' : ' no-' ) + cs;
+		}());
+	</script>
+			<div id="wpadminbar" class="nojq nojs" role="navigation">
+			<a class="screen-reader-shortcut" href="#wp-toolbar" tabindex="1">Skip to toolbar</a>
+			<div class="quicklinks" id="wp-toolbar" role="navigation" aria-label="Top navigation toolbar." tabindex="0">
+				<ul id="wp-admin-bar-root-default" class="ab-top-menu">
+		<li id="wp-admin-bar-wp-logo" class="menupop"><a class="ab-item"  aria-haspopup="true" href="http://www.gluster.org/wp-admin/about.php" title="About WordPress"><span class="ab-icon"></span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-wp-logo-default" class="ab-submenu">
+		<li id="wp-admin-bar-about"><a class="ab-item"  href="http://www.gluster.org/wp-admin/about.php">About WordPress</a>		</li></ul><ul id="wp-admin-bar-wp-logo-external" class="ab-sub-secondary ab-submenu">
+		<li id="wp-admin-bar-wporg"><a class="ab-item"  href="http://wordpress.org/">WordPress.org</a>		</li>
+		<li id="wp-admin-bar-documentation"><a class="ab-item"  href="http://codex.wordpress.org/">Documentation</a>		</li>
+		<li id="wp-admin-bar-support-forums"><a class="ab-item"  href="http://wordpress.org/support/">Support Forums</a>		</li>
+		<li id="wp-admin-bar-feedback"><a class="ab-item"  href="http://wordpress.org/support/forum/requests-and-feedback">Feedback</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-site-name" class="menupop"><a class="ab-item"  aria-haspopup="true" href="http://www.gluster.org/wp-admin/">Gluster Community Website</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-site-name-default" class="ab-submenu">
+		<li id="wp-admin-bar-dashboard"><a class="ab-item"  href="http://www.gluster.org/wp-admin/">Dashboard</a>		</li></ul><ul id="wp-admin-bar-appearance" class="ab-submenu">
+		<li id="wp-admin-bar-themes"><a class="ab-item"  href="http://www.gluster.org/wp-admin/themes.php">Themes</a>		</li>
+		<li id="wp-admin-bar-customize" class="hide-if-no-customize"><a class="ab-item"  href="http://www.gluster.org/wp-admin/customize.php?url=http%3A%2F%2Fwww.gluster.org%2F2012%2F09%2Fhowto-using-ufo-swift-a-quick-and-dirty-setup-guide%2F">Customize</a>		</li>
+		<li id="wp-admin-bar-widgets"><a class="ab-item"  href="http://www.gluster.org/wp-admin/widgets.php">Widgets</a>		</li>
+		<li id="wp-admin-bar-menus"><a class="ab-item"  href="http://www.gluster.org/wp-admin/nav-menus.php">Menus</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-un-usernoise" class="menupop"><a class="ab-item"  aria-haspopup="true" href="http://www.gluster.org/wp-admin/edit.php?order=desc&#038;post_type=un_feedback&#038;post_status=pending">Usernoise <span id="un-new-feedback-count">13</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-un-usernoise-default" class="ab-submenu">
+		<li id="wp-admin-bar-un-feedback"><a class="ab-item"  href="http://www.gluster.org/wp-admin/edit.php?order=desc&#038;post_type=un_feedback&#038;post_status=pending">Feedback</a>		</li>
+		<li id="wp-admin-bar-un-settings"><a class="ab-item"  href="http://www.gluster.org/wp-admin/options-general.php?page=usernoise">Settings</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-comments"><a class="ab-item"  href="http://www.gluster.org/wp-admin/edit-comments.php" title="1 comment awaiting moderation"><span class="ab-icon"></span><span id="ab-awaiting-mod" class="ab-label awaiting-mod pending-count count-1">1</span></a>		</li>
+		<li id="wp-admin-bar-new-content" class="menupop"><a class="ab-item"  aria-haspopup="true" href="http://www.gluster.org/wp-admin/post-new.php" title="Add New"><span class="ab-icon"></span><span class="ab-label">New</span></a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-new-content-default" class="ab-submenu">
+		<li id="wp-admin-bar-new-post"><a class="ab-item"  href="http://www.gluster.org/wp-admin/post-new.php">Post</a>		</li>
+		<li id="wp-admin-bar-new-media"><a class="ab-item"  href="http://www.gluster.org/wp-admin/media-new.php">Media</a>		</li>
+		<li id="wp-admin-bar-new-link"><a class="ab-item"  href="http://www.gluster.org/wp-admin/link-add.php">Link</a>		</li>
+		<li id="wp-admin-bar-new-page"><a class="ab-item"  href="http://www.gluster.org/wp-admin/post-new.php?post_type=page">Page</a>		</li>
+		<li id="wp-admin-bar-new-user"><a class="ab-item"  href="http://www.gluster.org/wp-admin/user-new.php">User</a>		</li></ul></div>		</li>
+		<li id="wp-admin-bar-edit"><a class="ab-item"  href="http://www.gluster.org/wp-admin/post.php?post=1412&#038;action=edit">Edit Post</a>		</li></ul><ul id="wp-admin-bar-top-secondary" class="ab-top-secondary ab-top-menu">
+		<li id="wp-admin-bar-search" class="admin-bar-search"><div class="ab-item ab-empty-item" tabindex="-1"><form action="http://www.gluster.org/" method="get" id="adminbarsearch"><input class="adminbar-input" name="s" id="adminbar-search" type="text" value="" maxlength="150" /><input type="submit" class="adminbar-button" value="Search"/></form></div>		</li>
+		<li id="wp-admin-bar-my-account" class="menupop"><a class="ab-item"  aria-haspopup="true" href="http://www.gluster.org/wp-admin/profile.php" title="My Account">Howdy, johnmark</a><div class="ab-sub-wrapper"><ul id="wp-admin-bar-user-actions" class="ab-submenu">
+		<li id="wp-admin-bar-user-info"><a class="ab-item" tabindex="-1" href="http://www.gluster.org/wp-admin/profile.php"><span class='display-name'>johnmark</span></a>		</li>
+		<li id="wp-admin-bar-edit-profile"><a class="ab-item"  href="http://www.gluster.org/wp-admin/profile.php">Edit My Profile</a>		</li>
+		<li id="wp-admin-bar-logout"><a class="ab-item"  href="http://www.gluster.org/wp-login.php?action=logout&#038;_wpnonce=849df536fd">Log Out</a>		</li></ul></div>		</li></ul>			</div>
+			<a class="screen-reader-shortcut" href="http://www.gluster.org/wp-login.php?action=logout&#038;_wpnonce=849df536fd">Log Out</a>
+		</div>
+
+		
+</body>
+</html>
