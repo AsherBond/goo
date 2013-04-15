@@ -1,6 +1,3 @@
-% 
-% 
-% 2013-04-14
 
 With EL6, configuring OpenStack Grizzly to use Gluster for its Cinder
 (block) storage is fairly simple.
